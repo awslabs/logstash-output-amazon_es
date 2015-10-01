@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.summary         = "Logstash Output to Amazon Elasticsearch Service"
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"
   s.authors         = ["Amazon"]
-  s.email           = 'cloud-search-feedback@amazon.com'
+  s.email           = 'feedback-prod-elasticsearch@amazon.com'
   s.homepage        = "http://logstash.net/"
   s.require_paths = ["lib"]
 

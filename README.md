@@ -27,8 +27,8 @@ An example configuration:
 	    amazon_es {
 	        hosts => ["foo.us-east-1.es.amazonaws.com"]
 	        region => "us-east-1"
-			access_key => 'ACCESS_KEY' (Will be made optional in next release to support instance profiles)
-			secret_key => 'SECRET_KEY' 
+			aws_access_key_id => 'ACCESS_KEY' (Will be made optional in next release to support instance profiles)
+			aws_secret_access_key => 'SECRET_KEY' 
 			index => "production-logs-%{+YYYY.MM.dd}"
 		}
 	}

@@ -52,7 +52,7 @@ An example configuration:
 		* max_retries (number, default => 3) - Set max retry for each event
 		* retry_max_items (number, default => 5000) - Set retry queue size for events that failed to send
 		* retry_max_interval (number, default => 5) - Set max interval between bulk retries
-	* index (string, default => "logstash-%{+YYYY.MM.dd}") - Elasticsearch index to write events into
+	* index (string - all lowercase, default => "logstash-%{+YYYY.MM.dd}") - Elasticsearch index to write events into
 	* flush_size (number , default => 500) - This setting controls how many events will be buffered before sending a batch of events in bulk API
 	* idle_flush_time (number, default => 1) - The amount of time in seconds since last flush before a flush is forced.
 		This setting helps ensure slow event rates don't get stuck in Logstash.

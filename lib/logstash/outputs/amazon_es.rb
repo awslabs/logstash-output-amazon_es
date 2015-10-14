@@ -318,7 +318,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
       bulk_response = @client.bulk(es_actions)
 
-      if bulk_response["errors"]
+      if bulk_response["errors"] && bulk_response["items"]
         actions_to_retry = []
 
         bulk_response['items'].each_with_index do |item,idx|

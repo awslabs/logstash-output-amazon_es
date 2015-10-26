@@ -7,11 +7,11 @@ class AwsV4Signer < Faraday::Middleware
     def initialize(env)
       @env = env
     end
-    
+
     def headers
       @env.request_headers
     end
-    
+
     def set_header(header)
       @env.request_headers = header
     end
@@ -29,19 +29,23 @@ class AwsV4Signer < Faraday::Middleware
     end
   end
 
-  def initialize(app, options = nil)
+  def signer
+    credentials = @options.fetch(:credentials)
+    service_name = @options.fetch(:service_name)
+    region = @options.fetch(:region)
+    Aws::Signers::V4.new(credentials, service_name, region)
+  end
+
+ def initialize(app, options = nil)
     super(app)
-    credentials = options.fetch(:credentials)
-    service_name = options.fetch(:service_name)
-    region = options.fetch(:region)
-    @signer = Aws::Signers::V4.new(credentials, service_name, region)
+    @options = options
     @net_http = app.is_a?(Faraday::Adapter::NetHttp)
   end
 
   def call(env)
     normalize_for_net_http!(env)
     req = Request.new(env)
-    @signer.sign(req)
+    signer().sign(req)
     @app.call(env)
   end
 

@@ -188,6 +188,10 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   # create a new document with this parameter as json string if document_id doesn't exists
   config :upsert, :validate => :string, :default => ""
 
+  # Enable SSL
+  # send documents to elasticsearch with https (set to true) or http (set to false)
+  config :scheme, :validate => %w(http https), :default => 'http'
+
   public
   def register
     @hosts = Array(@hosts)
@@ -224,7 +228,12 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
     common_options.merge! update_options if @action == 'update'
 
     @client = LogStash::Outputs::AES::HttpClient.new(
-      common_options.merge(:hosts => @hosts, :port => @port, :region => @region, :aws_access_key_id => @aws_access_key_id, :aws_secret_access_key => @aws_secret_access_key)
+      common_options.merge(:hosts => @hosts,
+                           :port => @port,
+                           :region => @region,
+                           :aws_access_key_id => @aws_access_key_id,
+                           :aws_secret_access_key => @aws_secret_access_key,
+                           :scheme => @scheme)
     )
 
     if @manage_template

@@ -14,11 +14,11 @@ require "uri"
 #
 #
 # The configuration and experience is similar to logstash-output-elasticsearch plugin and we have added Signature V4 support for the same
-# Some of the default configurations like connection timeouts have been tuned for optimal performance with Amazon Elasticsearch 
+# Some of the default configurations like connection timeouts have been tuned for optimal performance with Amazon Elasticsearch
 #
 # ==== Retry Policy
 #
-# This plugin uses the same retry policy as logstash-output-elasticsearch, It uses bulk API to optimize its  
+# This plugin uses the same retry policy as logstash-output-elasticsearch, It uses bulk API to optimize its
 # imports into Elasticsearch.. These requests may experience either partial or total failures.
 # Events are retried if they fail due to either a network error or the status codes
 # 429 (the server is busy), 409 (Version Conflict), or 503 (temporary overloading/maintenance).
@@ -53,13 +53,13 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
   # The index type to write events to. Generally you should try to write only
   # similar events to the same 'type'. String expansion `%{foo}` works here.
-  # 
+  #
   # Deprecated in favor of `document_type` field.
   config :index_type, :validate => :string, :deprecated => "Please use the 'document_type' setting instead. It has the same effect, but is more appropriately named."
 
   # The document type to write events to. Generally you should try to write only
   # similar events to the same 'type'. String expansion `%{foo}` works here.
-  # Unless you set 'document_type', the event 'type' will be used if it exists 
+  # Unless you set 'document_type', the event 'type' will be used if it exists
   # otherwise the document type will be assigned the value of 'logs'
   config :document_type, :validate => :string
 
@@ -100,28 +100,28 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   config :routing, :validate => :string
 
 
-# Set the endpoint of your Amazon Elasticsearch domain. This will always be array of size 1 
+# Set the endpoint of your Amazon Elasticsearch domain. This will always be array of size 1
 #     ["foo.us-east-1.es.amazonaws.com"]
   config :hosts, :validate => :array
 
   # You can set the remote port as part of the host, or explicitly here as well
   config :port, :validate => :string, :default => 80
-  
+
   #Signing specific details
   config :region, :validate => :string, :default => "us-east-1"
-  
-  # aws_access_key_id and aws_secret_access_key are currently needed for this plugin to work right. 
+
+  # aws_access_key_id and aws_secret_access_key are currently needed for this plugin to work right.
   # Subsequent versions will have the credential resolution logic as follows:
   #
-  # - User passed aws_access_key_id and aws_secret_access_key in aes configuration 
-  # - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY 
-  #   (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET), 
+  # - User passed aws_access_key_id and aws_secret_access_key in aes configuration
+  # - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+  #   (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET),
   #   or AWS_ACCESS_KEY and AWS_SECRET_KEY (only recognized by Java SDK)
   # - Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI
   # - Instance profile credentials delivered through the Amazon EC2 metadata service
   config :aws_access_key_id, :validate => :string
   config :aws_secret_access_key, :validate => :string
-  
+
 
   # This plugin uses the bulk index api for improved indexing performance.
   # To make efficient bulk api calls, we will buffer a certain number of
@@ -288,7 +288,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   def receive(event)
     return unless output?(event)
 
-    # block until we have not maxed out our 
+    # block until we have not maxed out our
     # retry queue. This is applying back-pressure
     # to slow down the receive-rate
     @retry_flush_mutex.synchronize {
@@ -312,7 +312,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
       :_type => type,
       :_routing => @routing ? event.sprintf(@routing) : nil
     }
-    
+
     params[:_upsert] = LogStash::Json.load(event.sprintf(@upsert)) if @action == 'update' && @upsert != ""
 
     buffer_receive([event.sprintf(@action), params, event])
@@ -389,19 +389,19 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
     @retry_teardown_requested.make_true
     # First, make sure retry_timer_thread is stopped
-    # to ensure we do not signal a retry based on 
+    # to ensure we do not signal a retry based on
     # the retry interval.
     Thread.kill(@retry_timer_thread)
     @retry_timer_thread.join
-    # Signal flushing in the case that #retry_flush is in 
+    # Signal flushing in the case that #retry_flush is in
     # the process of waiting for a signal.
     @retry_flush_mutex.synchronize { @retry_queue_needs_flushing.signal }
-    # Now, #retry_flush is ensured to not be in a state of 
+    # Now, #retry_flush is ensured to not be in a state of
     # waiting and can be safely joined into the main thread
     # for further final execution of an in-process remaining call.
     @retry_thread.join
 
-    # execute any final actions along with a proceeding retry for any 
+    # execute any final actions along with a proceeding retry for any
     # final actions that did not succeed.
     buffer_flush(:final => true)
     retry_flush
@@ -435,11 +435,11 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
 
   private
-  # in charge of submitting any actions in @retry_queue that need to be 
+  # in charge of submitting any actions in @retry_queue that need to be
   # retried
   #
   # This method is not called concurrently. It is only called by @retry_thread
-  # and once that thread is ended during the teardown process, a final call 
+  # and once that thread is ended during the teardown process, a final call
   # to this method is done upon teardown in the main thread.
   def retry_flush()
     unless @retry_queue.empty?

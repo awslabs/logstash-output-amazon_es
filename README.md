@@ -10,7 +10,7 @@ It is fully free and fully open source. The license is Apache 2.0, meaning you a
 One command installation
 `bin/plugin install logstash-output-amazon_es`
 
-While we are in the process of getting this plugin fully integrated within logstash to make installation simpler, 
+While we are in the process of getting this plugin fully integrated within logstash to make installation simpler,
 if above does not work, or you would like to patch code here is a workaround to install this plugin within your logstash:
 
 1. Check out/clone this code from github
@@ -28,19 +28,19 @@ An example configuration:
 	        hosts => ["foo.us-east-1.es.amazonaws.com"]
 	        region => "us-east-1"
 			aws_access_key_id => 'ACCESS_KEY' (Will be made optional in next release to support instance profiles)
-			aws_secret_access_key => 'SECRET_KEY' 
+			aws_secret_access_key => 'SECRET_KEY'
 			index => "production-logs-%{+YYYY.MM.dd}"
 		}
 	}
-  
+
 * Required Parameters
 	* hosts (array of string) - Amazon Elasticsearch domain endpoint. eg ["foo.us-east-1.es.amazonaws.com"]
     * region (string, :default => "us-east-1") - region where the domain is located
-    
+
 * Optional Parameters
 	* Credential parameters
 		* aws_access_key_id, :validate => :string - Optional AWS Access key
-		* aws_secret_access_key, :validate => :string - Optional AWS Secret Key  
+		* aws_secret_access_key, :validate => :string - Optional AWS Secret Key
 		   The credential resolution logic can be described as follows:
 		   - User passed aws_access_key_id and aws_secret_access_key in aes configuration
 		   - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
@@ -63,6 +63,7 @@ An example configuration:
 	* template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
 	* template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
 	* port (string, default 80) - Amazon Elasticsearch Service listens on port 80, if you have a custom proxy fronting elasticsearch, this parameter may need tweaking.
+  * scheme (string, default `http`) - Scheme to use for Elasticsearch transport.
 
 ## Documentation
 
@@ -108,7 +109,7 @@ bundle exec rspec
 Dependencies: [Docker](http://docker.com)
 
 Before the test suite is run, we will load and run an
-Elasticsearch instance within a docker container. This container 
+Elasticsearch instance within a docker container. This container
 will be cleaned up when suite has finished.
 
 ```sh

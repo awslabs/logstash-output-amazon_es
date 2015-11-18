@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.metadata = { "logstash_plugin" => "true", "logstash_group" => "output" }
 
   # Gem dependencies
-  s.add_runtime_dependency 'concurrent-ruby'
+  s.add_runtime_dependency 'concurrent-ruby', '0.9.1'
   s.add_runtime_dependency 'elasticsearch', ['>= 1.0.10', '~> 1.0']
   s.add_runtime_dependency 'stud', ['>= 0.0.17', '~> 0.0']
   s.add_runtime_dependency 'cabin', ['~> 0.6']

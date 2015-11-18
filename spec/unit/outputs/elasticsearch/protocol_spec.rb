@@ -3,11 +3,30 @@ require "logstash/outputs/amazon_es/http_client"
 require "java"
 
 describe LogStash::Outputs::AES::HttpClient do
+  describe '@client.transport' do
+
+    describe 'scheme' do
+      let(:transport) { described_class.new(options).client.transport }
+
+      subject(:schemes) { transport.connections.connections.map { |c| c.host[:scheme] } }
+
+      context 'http' do
+        let(:options)   { { :scheme => 'http', :hosts => ['localhost'] } }
+        it { is_expected.to eq(%w(http)) }
+      end
+
+      context 'https' do
+        let(:options)   { { :scheme => 'https', :hosts => ['localhost'] } }
+        it { is_expected.to eq(%w(https)) }
+      end
+    end
+  end
+
   context "successful" do
     it "should map correctly" do
       bulk_response = {"took"=>74, "errors"=>false, "items"=>[{"create"=>{"_index"=>"logstash-2014.11.17",
                                                                           "_type"=>"logs", "_id"=>"AUxTS2C55Jrgi-hC6rQF",
-                                                                          "_version"=>1, "status"=>201}}]} 
+                                                                          "_version"=>1, "status"=>201}}]}
       actual = LogStash::Outputs::AES::HttpClient.normalize_bulk_response(bulk_response)
       insist { actual } == {"errors"=> false}
     end

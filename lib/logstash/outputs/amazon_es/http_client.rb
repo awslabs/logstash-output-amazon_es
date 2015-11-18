@@ -59,10 +59,12 @@ module LogStash::Outputs::AES
     def build_client(options)
       hosts = options[:hosts]
       port = options[:port]
+      port = 443 if port.to_s == '80' && options[:scheme] == 'https'
+
       client_settings = options[:client_settings] || {}
 
       uris = hosts.map do |host|
-        "http://#{host}:#{port}#{client_settings[:path]}".gsub(/[\/]+$/,'')
+        "#{options[:scheme]}://#{host}:#{port}#{client_settings[:path]}".gsub(/[\/]+$/,'')
       end
 
       @client_options = {
@@ -72,9 +74,10 @@ module LogStash::Outputs::AES
         :aws_secret_access_key => options[:aws_secret_access_key],
         :transport_options => {
           :request => {:open_timeout => 0, :timeout => 60},  # ELB timeouts are set at 60
-          :proxy => client_settings[:proxy],          
+          :proxy => client_settings[:proxy],
         },
-        :transport_class => Elasticsearch::Transport::Transport::HTTP::AWS
+        :transport_class => Elasticsearch::Transport::Transport::HTTP::AWS,
+        :scheme => options[:scheme]
       }
 
       if options[:user] && options[:password] then

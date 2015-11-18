@@ -59,6 +59,8 @@ module LogStash::Outputs::AES
     def build_client(options)
       hosts = options[:hosts]
       port = options[:port]
+      port = 443 if port.to_s == '80' && options[:scheme] == 'https'
+
       client_settings = options[:client_settings] || {}
 
       uris = hosts.map do |host|

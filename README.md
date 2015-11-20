@@ -15,7 +15,7 @@ if above does not work, or you would like to patch code here is a workaround to 
 
 1. Check out/clone this code from github
 2. Build plugin using - `gem build logstash-output-amazon_es.gemspec` ( this works with jruby and rubygem versions > 1.9)
-3. Install plugin using `<logstash-home>/bin/plugin install logstash-output-amazon_es-0.1.0-java.gem` (or the non java variant)
+3. Install plugin using `<logstash-home>/bin/plugin install logstash-output-amazon_es-0.2.0-java.gem` (or the non java variant)
 
 ## Configuration for Amazon Elasticsearch Output plugin
 
@@ -62,7 +62,7 @@ An example configuration:
 		This helps keep both fast and slow log streams moving along in near-real-time.
 	* template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
 	* template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
-	* port (string, default 443) - Amazon Elasticsearch Service listens on port 443, if you have a custom proxy fronting elasticsearch, this parameter may need tweaking.
+	* port (string, default 443) - Amazon Elasticsearch Service listens on port 443 - https (default) and 80 - http. Tweak this for custom proxy.
 	* protocol (string, default https) - The protocol used to connect to the Amazon Elasticsearch Service
 
 ## Documentation

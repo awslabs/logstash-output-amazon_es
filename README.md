@@ -158,3 +158,14 @@ Programming is not a required skill. Whatever you've seen about open source and 
 It is more important to the community that you are able to contribute.
 
 For more information about contributing, see the [CONTRIBUTING](https://github.com/elastic/logstash/blob/master/CONTRIBUTING.md) file.
+
+## Building the Logstash output plugin with Docker
+
+**Prerequisites:**
+
+- [Docker Engine](https://www.docker.com/products/docker-engine) >= 1.9.1
+- [Docker Compose](https://docs.docker.com/compose/) >= 1.6.0
+
+		docker-compose up
+
+This will result in a newly created binary inside the host-mounted volume `${PWD}` named `logstash-output-amazon_es-<VERSION>-java.gem`. Where `<VERSION>` is defined as value of `s.version` in [logstash-output-amazon_es.gemspec](logstash-output-amazon_es.gemspec) file.

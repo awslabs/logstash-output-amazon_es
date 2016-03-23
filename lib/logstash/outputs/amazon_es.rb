@@ -335,7 +335,16 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
             @logger.warn "retrying failed action with response code: #{status}"
             actions_to_retry << action
           elsif not SUCCESS_CODES.include?(status)
-            @logger.warn "failed action", status: status, error: error, action: action
+            record = action[1]
+            @logger.warn "failed action", {
+              status: status,
+              error: error,
+              action: action[0],
+              id: record[:_id],
+              index: record[:_index],
+              type: record[:_type],
+              routing: record[:_routing]
+            }
           end
         end
 

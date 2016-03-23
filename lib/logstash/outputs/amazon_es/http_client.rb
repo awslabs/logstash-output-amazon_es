@@ -51,8 +51,6 @@ module LogStash::Outputs::AES
       end.flatten
 
       bulk_response = @client.bulk(:body => bulk_body)
-
-      self.class.normalize_bulk_response(bulk_response)
     end
 
     private

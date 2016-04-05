@@ -191,6 +191,10 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   # create a new document with this parameter as json string if document_id doesn't exists
   config :upsert, :validate => :string, :default => ""
 
+  declare_workers_not_supported! if self.respond_to?(:declare_workers_not_supported!)
+
+  declare_threadsafe! if self.respond_to?(:declare_threadsafe!)
+
   public
   def register
     @hosts = Array(@hosts)
@@ -277,6 +281,12 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
     @logger.info("Using mapping template", :template => template)
     return template
   end # def get_template
+
+  public
+  # Takes an array of events
+  def multi_receive(events)
+    events.each { |x| receive x }
+  end # def multi_receive
 
   public
   def receive(event)

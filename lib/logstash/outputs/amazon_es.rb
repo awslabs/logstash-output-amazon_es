@@ -113,8 +113,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   #Signing specific details
   config :region, :validate => :string, :default => "us-east-1"
 
-  # aws_access_key_id and aws_secret_access_key are currently needed for this plugin to work right.
-  # Subsequent versions will have the credential resolution logic as follows:
+  # Credential resolution logic works as follows:
   #
   # - User passed aws_access_key_id and aws_secret_access_key in aes configuration
   # - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY

@@ -71,6 +71,7 @@ module LogStash::Outputs::AES
         :region => options[:region],
         :aws_access_key_id => options[:aws_access_key_id],
         :aws_secret_access_key => options[:aws_secret_access_key],
+        :aws_session_token => options[:aws_session_token],
         :transport_options => {
           :request => {:open_timeout => 0, :timeout => 60},  # ELB timeouts are set at 60
           :proxy => client_settings[:proxy],

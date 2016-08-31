@@ -24,17 +24,17 @@ module Elasticsearch
         #
         class AWS
           include Elasticsearch::Transport::Transport::Base
-          
+
 
           DEFAULT_PORT = 80
-          DEFAULT_PROTOCOL = "http"    
-          
+          DEFAULT_PROTOCOL = "http"
+
           CredentialConfig = Struct.new(
             :access_key_id,
             :secret_access_key,
             :session_token,
             :profile
-          )      
+          )
 
           # Performs the request by invoking {Transport::Base#perform_request} with a block.
           #
@@ -61,9 +61,9 @@ module Elasticsearch
             region = options[:region]
             access_key_id = options[:aws_access_key_id] || nil
             secret_access_key = options[:aws_secret_access_key] || nil
-            session_token = options[:session_token] || nil
+            session_token = options[:aws_session_token] || nil
             profile = options[:profile] || 'default'
-            
+
             credential_config = CredentialConfig.new(access_key_id, secret_access_key, session_token, profile)
             credentials = Aws::CredentialProviderChain.new(credential_config).resolve
 
@@ -72,7 +72,7 @@ module Elasticsearch
                 host[:protocol]   = host[:scheme] || DEFAULT_PROTOCOL
                 host[:port]     ||= DEFAULT_PORT
                 url               = __full_url(host)
-                                  
+
                 aes_connection = ::Faraday::Connection.new(url,  (options[:transport_options] || {})) do |faraday|
                   faraday.request :aws_v4_signer,
                                         credentials: credentials,
@@ -80,7 +80,7 @@ module Elasticsearch
                                         region: region
                   faraday.adapter :manticore
                 end
-                
+
                 Connections::Connection.new \
                   :host => host,
                   :connection => aes_connection

@@ -115,7 +115,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
   # Credential resolution logic works as follows:
   #
-  # - User passed aws_access_key_id and aws_secret_access_key in aes configuration
+  # - User passed aws_access_key_id and aws_secret_access_key and session_token in aes configuration
   # - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
   #   (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET),
   #   or AWS_ACCESS_KEY and AWS_SECRET_KEY (only recognized by Java SDK)
@@ -123,7 +123,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   # - Instance profile credentials delivered through the Amazon EC2 metadata service
   config :aws_access_key_id, :validate => :string
   config :aws_secret_access_key, :validate => :string
-
+  config :aws_session_token, :validate => :string
 
   # This plugin uses the bulk index api for improved indexing performance.
   # To make efficient bulk api calls, we will buffer a certain number of
@@ -226,7 +226,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
     common_options.merge! update_options if @action == 'update'
 
     @client = LogStash::Outputs::AES::HttpClient.new(
-      common_options.merge(:hosts => @hosts, :port => @port, :region => @region, :aws_access_key_id => @aws_access_key_id, :aws_secret_access_key => @aws_secret_access_key,:protocol => @protocol)
+      common_options.merge(:hosts => @hosts, :port => @port, :region => @region, :aws_access_key_id => @aws_access_key_id, :aws_secret_access_key => @aws_secret_access_key, :aws_session_token => @aws_session_token, :protocol => @protocol)
     )
 
     if @manage_template

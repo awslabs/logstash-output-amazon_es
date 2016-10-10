@@ -8,7 +8,7 @@ It is fully free and fully open source. The license is Apache 2.0, meaning you a
 
 ## Installation
 One command installation
-`bin/plugin install logstash-output-amazon_es`
+`bin/logstash-plugin install logstash-output-amazon_es`
 
 While we are in the process of getting this plugin fully integrated within logstash to make installation simpler,
 if above does not work, or you would like to patch code here is a workaround to install this plugin within your logstash:

@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name            = 'logstash-output-amazon_es'
-  s.version         = '1.0'
+  s.version         = '1.1.0'
   s.licenses        = ['apache-2.0']
   s.summary         = "Logstash Output to Amazon Elasticsearch Service"
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"
@@ -21,14 +21,15 @@ Gem::Specification.new do |s|
 
   # Gem dependencies
   s.add_runtime_dependency 'concurrent-ruby'
-  s.add_runtime_dependency 'elasticsearch', ['>= 1.0.10']
+  s.add_runtime_dependency 'elasticsearch', '~> 1.0', '>= 1.0.10'
   s.add_runtime_dependency 'stud', ['>= 0.0.17', '~> 0.0']
   s.add_runtime_dependency 'cabin', ['~> 0.6']
-  s.add_runtime_dependency "logstash-core", ">= 1.4.0", "< 3.0.0"
-  s.add_runtime_dependency "aws-sdk", ['>= 2.1.14', '~> 2']
+  s.add_runtime_dependency 'logstash-core-plugin-api', '>= 1.60', '<= 2.99'
+  s.add_runtime_dependency 'aws-sdk', '>= 2.1.14', '< 2.4'
   s.add_runtime_dependency "faraday", '~> 0.9.1'
   s.add_runtime_dependency "faraday_middleware", '~> 0.10.0'
 
+  s.add_development_dependency 'addressable', '< 2.5.0'
   s.add_development_dependency 'ftw', '~> 0.0.42'
   s.add_development_dependency 'logstash-input-generator'
 

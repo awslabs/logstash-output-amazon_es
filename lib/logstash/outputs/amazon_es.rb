@@ -288,16 +288,16 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
       @retry_queue_not_full.wait(@retry_flush_mutex) while @retry_queue.size > @retry_max_items
     }
 
-    event['@metadata']['retry_count'] = 0
+    event.set('[@metadata][retry_count]', 0)
 
     # Set the 'type' value for the index.
     type = if @document_type
-             event.sprintf(@document_type)
-           elsif @index_type # deprecated
-             event.sprintf(@index_type)
-           else
-             event["type"] || "logs"
-           end
+      event.sprintf(@document_type)
+    elsif @index_type # deprecated
+      event.sprintf(@index_type)
+    else
+      event.get('type') || 'logs'
+    end
 
     params = {
       :_id => @document_id ? event.sprintf(@document_id) : nil,
@@ -438,9 +438,9 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
     unless @retry_queue.empty?
       buffer = @retry_queue.size.times.map do
         next_action, next_doc, next_event = @retry_queue.pop
-        next_event['@metadata']['retry_count'] += 1
+        next_event.set('[@metadata][retry_count]', next_event.get('[@metadata][retry_count]') + 1)
 
-        if next_event['@metadata']['retry_count'] > @max_retries
+        if next_event.get('[@metadata][retry_count]') > @max_retries
           @logger.error "too many attempts at sending event. dropping: #{next_event}"
           nil
         else

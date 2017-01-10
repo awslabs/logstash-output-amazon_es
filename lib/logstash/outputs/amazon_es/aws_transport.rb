@@ -33,7 +33,10 @@ module Elasticsearch
             :access_key_id,
             :secret_access_key,
             :session_token,
-            :profile
+            :profile,
+            :instance_profile_credentials_retries,
+            :instance_profile_credentials_timeout,
+            :region
           )      
 
           # Performs the request by invoking {Transport::Base#perform_request} with a block.
@@ -63,8 +66,11 @@ module Elasticsearch
             secret_access_key = options[:aws_secret_access_key] || nil
             session_token = options[:session_token] || nil
             profile = options[:profile] || 'default'
+            instance_cred_retries = options[:instance_profile_credentials_retries] || 0
+            instance_cred_timeout = options[:instance_profile_credentials_timeout] || 1
             
-            credential_config = CredentialConfig.new(access_key_id, secret_access_key, session_token, profile)
+            credential_config = CredentialConfig.new(access_key_id, secret_access_key, session_token, profile,
+                                                     instance_cred_retries, instance_cred_timeout, region)
             credentials = Aws::CredentialProviderChain.new(credential_config).resolve
 
             Connections::Collection.new \

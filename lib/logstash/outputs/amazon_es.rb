@@ -292,12 +292,12 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
     # Set the 'type' value for the index.
     type = if @document_type
-      event.sprintf(@document_type)
-    elsif @index_type # deprecated
-      event.sprintf(@index_type)
-    else
-      event.get('type') || 'logs'
-    end
+             event.sprintf(@document_type)
+           elsif @index_type # deprecated
+             event.sprintf(@index_type)
+           else
+             event.get('type') || 'logs'
+           end
 
     params = {
       :_id => @document_id ? event.sprintf(@document_id) : nil,

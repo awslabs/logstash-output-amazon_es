@@ -69,21 +69,22 @@ module LogStash::Outputs::AES
       @client_options = {
         :hosts => uris,
         :region => options[:region],
-        :aws_access_key_id => options[:aws_access_key_id],
-        :aws_secret_access_key => options[:aws_secret_access_key],
         :transport_options => {
           :request => {:open_timeout => 0, :timeout => 60},  # ELB timeouts are set at 60
           :proxy => client_settings[:proxy],
         },
         :transport_class => Elasticsearch::Transport::Transport::HTTP::AWS
       }
+      internal_options = @client_options.clone
+      internal_options[:aws_access_key_id] = options[:aws_access_key_id]
+      internal_options[:aws_secret_access_key] = options[:aws_secret_access_key]
 
       if options[:user] && options[:password] then
         token = Base64.strict_encode64(options[:user] + ":" + options[:password])
-        @client_options[:headers] = { "Authorization" => "Basic #{token}" }
+        internal_options[:headers] = { "Authorization" => "Basic #{token}" }
       end
 
-      Elasticsearch::Client.new(client_options)
+      Elasticsearch::Client.new(internal_options)
     end
 
     def self.normalize_bulk_response(bulk_response)

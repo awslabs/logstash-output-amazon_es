@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'stud', ['>= 0.0.17', '~> 0.0']
   s.add_runtime_dependency 'cabin', ['~> 0.6']
   s.add_runtime_dependency 'logstash-core-plugin-api', '>= 1.60', '<= 2.99'
-  s.add_runtime_dependency 'aws-sdk', '>= 2.1.14', '~> 2'
+  s.add_runtime_dependency 'aws-sdk', '>= 2.3.22', '~> 2'
   s.add_runtime_dependency "faraday", '~> 0.9.1'
   s.add_runtime_dependency "faraday_middleware", '~> 0.10.0'
 

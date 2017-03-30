@@ -16,7 +16,8 @@ if above does not work, or you would like to patch code here is a workaround to 
 1. Check out/clone this code from github
 2. Build plugin using - `gem build logstash-output-amazon_es.gemspec` ( this works with jruby and rubygem versions > 1.9)
 3. Install plugin using `<logstash-home>/bin/plugin install logstash-output-amazon_es-0.2.0-java.gem` (or the non java variant)
-4. For the 2.3 version , please use '<logstash-home>/bin/logstash-plugin install logstash-output-amazon_es-1.0-java.gem' 
+4. For 2.3 support, please use '<logstash-home>/bin/logstash-plugin install logstash-output-amazon_es-1.0-java.gem' 
+5. For 5.2 support, please use '<logstash-home>/bin/logstash-plugin install logstash-output-amazon_es-2.0.0-java.gem' 
 
 ## Configuration for Amazon Elasticsearch Output plugin
 

@@ -320,7 +320,7 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
 
       bulk_response = @client.bulk(es_actions)
 
-      if bulk_response["errors"] && bulk_response["items"]
+      if bulk_response["items"]
         actions_to_retry = []
 
         bulk_response['items'].each_with_index do |item,idx|
@@ -330,10 +330,17 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
           status = props['status']
           error = props['error']
 
-          if RETRYABLE_CODES.include?(status)
+          action[2].set("@metadata", {
+            "es_output_status" => status,
+            "es_output_error" => error
+          })
+
+          if SUCCESS_CODES.include?(status)
+            next
+          elsif RETRYABLE_CODES.include?(status)
             @logger.warn "retrying failed action with response code: #{status}"
             actions_to_retry << action
-          elsif not SUCCESS_CODES.include?(status)
+          else
             @logger.warn "failed action", status: status, error: error, action: action
           end
         end

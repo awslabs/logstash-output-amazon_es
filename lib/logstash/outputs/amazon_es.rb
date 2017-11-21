@@ -307,8 +307,8 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
       :_id => @document_id ? event.sprintf(@document_id) : nil,
       :_index => event.sprintf(@index),
       :_type => type,
-      :_routing => @routing ? event.sprintf(@routing) : nil
-      :parent => @parent ? event.sprintf(@parent) : nil
+      :_routing => @routing ? event.sprintf(@routing) : nil,
+      :_parent => @parent ? event.sprintf(@parent) : nil
     }
 
     params[:_upsert] = LogStash::Json.load(event.sprintf(@upsert)) if @action == 'update' && @upsert != ""

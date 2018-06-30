@@ -27,7 +27,8 @@ module LogStash::Outputs::AES
     end
 
     def bulk(actions)
-      bulk_body = actions.collect do |action, args, source|
+      actionsbyindex = Hash.new { |hash, key| hash[key] = [] }
+      actions.each do |action, args, source|
         if action == 'update'
           if args[:_id]
             source = { 'doc' => source }
@@ -43,16 +44,20 @@ module LogStash::Outputs::AES
 
         args.delete(:_upsert)
 
+        index = args[:_index]
         if source
-          next [ { action => args }, source ]
+          actionsbyindex[index].push([ { action => args.except(:_index) }, source ])
         else
-          next { action => args }
+          actionsbyindex[index].push({ action => args.except(:_index) })
         end
-      end.flatten
+      end
 
-      bulk_response = @client.bulk(:body => bulk_body)
-
-      self.class.normalize_bulk_response(bulk_response)
+      merged_responses = nil
+      actionsbyindex.each do |index, actionlist|
+        bulk_response = @client.bulk(:index => index, :body => actionlist.flatten)
+        merged_responses = self.class.merge_normalized_responses(merged_responses, self.class.normalize_bulk_response(bulk_response))
+      end
+      merged_responses
     end
 
     private
@@ -85,6 +90,23 @@ module LogStash::Outputs::AES
       end
 
       Elasticsearch::Client.new(internal_options)
+    end
+
+    def self.merge_normalized_responses(response_old, response_new)
+      if response_old.nil?
+        return response_new
+      end
+
+      return response_old.merge(response_new) do |key, oldval, newval|
+        if key=="errors" and oldval
+          next oldval
+        elsif key=="statuses"
+          if oldval
+            next oldval + newval
+          end
+        end
+        next newval
+      end
     end
 
     def self.normalize_bulk_response(bulk_response)

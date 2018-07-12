@@ -43,7 +43,7 @@ module LogStash::Outputs::AES
 
         args.delete(:_upsert)
 
-        if source
+        if source && action != 'delete'
           next [ { action => args }, source ]
         else
           next { action => args }

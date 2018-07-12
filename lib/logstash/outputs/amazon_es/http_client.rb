@@ -27,6 +27,7 @@ module LogStash::Outputs::AES
     end
 
     def bulk(actions)
+      return if actions.empty?
       bulk_body = actions.collect do |action, args, source|
         if action == 'update'
           if args[:_id]

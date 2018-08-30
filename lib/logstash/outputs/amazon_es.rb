@@ -99,6 +99,10 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
   # This can be dynamic using the `%{foo}` syntax.
   config :routing, :validate => :string
 
+  # For child documents, ID of the associated parent.
+  # This can be dynamic using the %{foo} syntax.
+  config :parent, :validate => :string
+
 
 # Set the endpoint of your Amazon Elasticsearch domain. This will always be array of size 1
 #     ["foo.us-east-1.es.amazonaws.com"]
@@ -303,7 +307,8 @@ class LogStash::Outputs::AmazonES < LogStash::Outputs::Base
       :_id => @document_id ? event.sprintf(@document_id) : nil,
       :_index => event.sprintf(@index),
       :_type => type,
-      :_routing => @routing ? event.sprintf(@routing) : nil
+      :_routing => @routing ? event.sprintf(@routing) : nil,
+      :_parent => @parent ? event.sprintf(@parent) : nil
     }
 
     params[:_upsert] = LogStash::Json.load(event.sprintf(@upsert)) if @action == 'update' && @upsert != ""

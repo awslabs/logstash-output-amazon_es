@@ -1,25 +1,10 @@
 # Logstash Plugin
 
+[![Travis Build Status](https://travis-ci.org/logstash-plugins/logstash-output-elasticsearch.svg)](https://travis-ci.org/logstash-plugins/logstash-output-elasticsearch)
+
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
-## License
-
-This library is licensed under the Apache 2.0 License. 
-
-# Setting Up
-
-## Installation
-One command installation
-`bin/logstash-plugin install logstash-output-amazon_es`
-
-While we are in the process of getting this plugin fully integrated within logstash to make installation simpler,
-if above does not work, or you would like to patch code here is a workaround to install this plugin within your logstash:
-
-1. Check out/clone this code from github
-2. Build plugin using - `gem build logstash-output-amazon_es.gemspec` ( this works with jruby and rubygem versions > 1.9)
-3. Install plugin using `<logstash-home>/bin/plugin install logstash-output-amazon_es-0.2.0-java.gem` (or the non java variant)
-4. For 2.3 support, please use '<logstash-home>/bin/logstash-plugin install logstash-output-amazon_es-1.0-java.gem' 
-5. For 5.2 support, please use '<logstash-home>/bin/logstash-plugin install logstash-output-amazon_es-2.0.1-java.gem' 
+It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
 
 ## Configuration for Amazon Elasticsearch Output plugin
 
@@ -44,27 +29,15 @@ An example configuration:
 
 * Optional Parameters
 	* Credential parameters
-		* aws_access_key_id, :validate => :string - Optional AWS Access key
+	    * aws_access_key_id, :validate => :string - Optional AWS Access key
 		* aws_secret_access_key, :validate => :string - Optional AWS Secret Key  
-		   The credential resolution logic can be described as follows:
-		   - User passed aws_access_key_id and aws_secret_access_key in aes configuration
-		   - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+		    The credential resolution logic can be described as follows:
+		    - User passed aws_access_key_id and aws_secret_access_key in aes configuration
+		    - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
 		     (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET),
 		     or AWS_ACCESS_KEY and AWS_SECRET_KEY (only recognized by Java SDK)
-		   - Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI
-		   - Instance profile credentials delivered through the Amazon EC2 metadata service
-	* Retry Parameters
-		* max_retries (number, default => 3) - Set max retry for each event
-		* retry_max_items (number, default => 5000) - Set retry queue size for events that failed to send
-		* retry_max_interval (number, default => 5) - Set max interval between bulk retries
-	* index (string - all lowercase, default => "logstash-%{+YYYY.MM.dd}") - Elasticsearch index to write events into
-	* flush_size (number , default => 500) - This setting controls how many events will be buffered before sending a batch of events in bulk API
-	* idle_flush_time (number, default => 1) - The amount of time in seconds since last flush before a flush is forced.
-		This setting helps ensure slow event rates don't get stuck in Logstash.
-		For example, if your `flush_size` is 100, and you have received 10 events,
-		and it has been more than `idle_flush_time` seconds since the last flush,
-		Logstash will flush those 10 events automatically.
-		This helps keep both fast and slow log streams moving along in near-real-time.
+		    - Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI
+		    - Instance profile credentials delivered through the Amazon EC2 metadata service
 	* template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
 	* template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
 	* port (string, default 443) - Amazon Elasticsearch Service listens on port 443 - https (default) and 80 - http. Tweak this for custom proxy.
@@ -83,7 +56,7 @@ Need help? Try #logstash on freenode IRC or the https://discuss.elastic.co/c/log
 
 ## Developing
 
-### 1. Plugin Development and Testing
+### 1. Plugin Developement and Testing
 
 #### Code
 - To get started, you'll need JRuby with the Bundler gem installed.
@@ -109,17 +82,6 @@ bundle install
 bundle exec rspec
 ```
 
-- Run integration tests
-
-Dependencies: [Docker](http://docker.com)
-
-Before the test suite is run, we will load and run an
-Elasticsearch instance within a docker container. This container
-will be cleaned up when suite has finished.
-
-```sh
-bundle exec rspec --tag integration
-```
 
 ### 2. Running your unpublished Plugin in Logstash
 
@@ -131,7 +93,12 @@ gem "logstash-filter-awesome", :path => "/your/local/logstash-filter-awesome"
 ```
 - Install plugin
 ```sh
+# Logstash 2.3 and higher
+bin/logstash-plugin install --no-verify
+
+# Prior to Logstash 2.3
 bin/plugin install --no-verify
+
 ```
 - Run Logstash with your plugin
 ```sh
@@ -149,7 +116,12 @@ gem build logstash-filter-awesome.gemspec
 ```
 - Install the plugin from the Logstash home
 ```sh
-bin/plugin install /your/local/plugin/logstash-filter-awesome.gem
+# Logstash 2.3 and higher
+bin/logstash-plugin install --no-verify
+
+# Prior to Logstash 2.3
+bin/plugin install --no-verify
+
 ```
 - Start Logstash and proceed to test the plugin
 
@@ -157,19 +129,8 @@ bin/plugin install /your/local/plugin/logstash-filter-awesome.gem
 
 All contributions are welcome: ideas, patches, documentation, bug reports, complaints, and even something you drew up on a napkin.
 
-Programming is not a required skill. Whatever you've seen about open source and maintainers or community members saying "send patches or die" - you will not see that here.
+Programming is not a required skill. Whatever you've seen about open source and maintainers or community members  saying "send patches or die" - you will not see that here.
 
 It is more important to the community that you are able to contribute.
 
 For more information about contributing, see the [CONTRIBUTING](https://github.com/elastic/logstash/blob/master/CONTRIBUTING.md) file.
-
-## Building the Logstash output plugin with Docker
-
-**Prerequisites:**
-
-- [Docker Engine](https://www.docker.com/products/docker-engine) >= 1.9.1
-- [Docker Compose](https://docs.docker.com/compose/) >= 1.6.0
-
-		docker-compose up
-
-This will result in a newly created binary inside the host-mounted volume `${PWD}` named `logstash-output-amazon_es-<VERSION>-java.gem`. Where `<VERSION>` is defined as value of `s.version` in [logstash-output-amazon_es.gemspec](logstash-output-amazon_es.gemspec) file.

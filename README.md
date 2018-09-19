@@ -1,7 +1,5 @@
 # Logstash Plugin
 
-[![Travis Build Status](https://travis-ci.org/logstash-plugins/logstash-output-elasticsearch.svg)](https://travis-ci.org/logstash-plugins/logstash-output-elasticsearch)
-
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
 It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
@@ -133,4 +131,3 @@ Programming is not a required skill. Whatever you've seen about open source and 
 
 It is more important to the community that you are able to contribute.
 
-For more information about contributing, see the [CONTRIBUTING](https://github.com/elastic/logstash/blob/master/CONTRIBUTING.md) file.

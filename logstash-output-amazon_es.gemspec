@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"
   s.authors         = ["Amazon"]
   s.email           = 'feedback-prod-elasticsearch@amazon.com'
-  s.homepage        = "http://logstash.net/"
+  s.homepage        = "https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/index.html"
   s.require_paths = ["lib"]
 
   s.platform = RUBY_PLATFORM

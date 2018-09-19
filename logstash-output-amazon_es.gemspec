@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name            = 'logstash-output-amazon_es'
-  s.version         = '6.3.1'
+  s.version         = '6.4.0'
   s.licenses        = ['Apache-2.0']
   s.summary         = "Logstash Output to Amazon Elasticsearch Service"
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"
@@ -26,9 +26,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "logstash-core-plugin-api", ">= 1.60", "<= 2.99"
   s.add_runtime_dependency 'aws-sdk', '>= 2.3.22', '~> 2'
 
-  s.add_development_dependency 'logstash-codec-plain'
-  s.add_development_dependency 'logstash-devutils'
-  s.add_development_dependency 'flores'
+  s.add_development_dependency 'logstash-codec-plain', '~> 0'
+  s.add_development_dependency 'logstash-devutils', '~> 0'
+  s.add_development_dependency 'flores', '~> 0'
   # Still used in some specs, we should remove this ASAP
-  s.add_development_dependency 'elasticsearch'
+  s.add_development_dependency 'elasticsearch', '~> 0'
 end

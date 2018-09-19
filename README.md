@@ -105,6 +105,15 @@ bin/logstash -e 'filter {awesome {}}'
 At this point any modifications to the plugin code will be applied to this local Logstash setup. After modifying the plugin, simply rerun Logstash.
 
 #### 2.2 Run in an installed Logstash
+Before build your gemfile, please make sure use JRuby. Here is how you can know your local ruby version:
+```sh
+rvm list
+```
+Please make sure you current using jruby. Here is how you can change to jruby
+```sh
+rvm jruby
+```
+
 
 You can use the same **2.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory or you can build the gem and install it using:
 

@@ -14,14 +14,14 @@ An example configuration:
 
 ```
 output {
-	amazon_es {
-		hosts => ["foo.us-east-1.es.amazonaws.com"]
-		region => "us-east-1"
-		# aws_access_key_id and aws_secret_access_key are optional if instance profile is configured
-		aws_access_key_id => 'ACCESS_KEY'
-		aws_secret_access_key => 'SECRET_KEY'
-		index => "production-logs-%{+YYYY.MM.dd}"
-	}
+    amazon_es {
+        hosts => ["foo.us-east-1.es.amazonaws.com"]
+        region => "us-east-1"
+        # aws_access_key_id and aws_secret_access_key are optional if instance profile is configured
+        aws_access_key_id => 'ACCESS_KEY'
+        aws_secret_access_key => 'SECRET_KEY'
+        index => "production-logs-%{+YYYY.MM.dd}"
+    }
 }
 ```
 

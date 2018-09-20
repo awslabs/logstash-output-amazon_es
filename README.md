@@ -2,141 +2,145 @@
 
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
-It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
+## License
 
-## Configuration for Amazon Elasticsearch Output plugin
+This library is licensed under Apache License 2.0.
 
-To run the Logstash output Amazon Elasticsearch plugin simply add a configuration following the below documentation.
+## Configuration for Amazon Elasticsearch Output Plugin
+
+To run the Logstash Output Amazon Elasticsearch plugin, simply add a configuration following the below documentation.
 
 An example configuration:
 
-	output {
-	    amazon_es {
-	        hosts => ["foo.us-east-1.es.amazonaws.com"]
-	        region => "us-east-1"
-	        # aws_access_key_id, aws_secret_access_key optional if instance profile is configured
-	        aws_access_key_id => 'ACCESS_KEY'
-	        aws_secret_access_key => 'SECRET_KEY'
-	        index => "production-logs-%{+YYYY.MM.dd}"
-            }
-        }
+```
+output {
+	amazon_es {
+		hosts => ["foo.us-east-1.es.amazonaws.com"]
+		region => "us-east-1"
+		# aws_access_key_id and aws_secret_access_key are optional if instance profile is configured
+		aws_access_key_id => 'ACCESS_KEY'
+		aws_secret_access_key => 'SECRET_KEY'
+		index => "production-logs-%{+YYYY.MM.dd}"
+	}
+}
+```
 
-* Required Parameters
-	* hosts (array of string) - Amazon Elasticsearch domain endpoint. eg ["foo.us-east-1.es.amazonaws.com"]
-    * region (string, :default => "us-east-1") - region where the domain is located
+### Required Parameters
 
-* Optional Parameters
-	* Credential parameters
-	    * aws_access_key_id, :validate => :string - Optional AWS Access key
-		* aws_secret_access_key, :validate => :string - Optional AWS Secret Key  
-		    The credential resolution logic can be described as follows:
-		    - User passed aws_access_key_id and aws_secret_access_key in aes configuration
-		    - Environment Variables - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-		     (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET),
-		     or AWS_ACCESS_KEY and AWS_SECRET_KEY (only recognized by Java SDK)
-		    - Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI
-		    - Instance profile credentials delivered through the Amazon EC2 metadata service
-	* template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
-	* template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
-	* port (string, default 443) - Amazon Elasticsearch Service listens on port 443 - https (default) and 80 - http. Tweak this for custom proxy.
-	* protocol (string, default https) - The protocol used to connect to the Amazon Elasticsearch Service
+- hosts (array of string) - the Amazon Elasticsearch Service domain endpoint (e.g. `["foo.us-east-1.es.amazonaws.com"]`)
+- region (string, :default => "us-east-1") - region where the domain is located
 
-## Documentation
+### Optional Parameters
 
-Logstash provides infrastructure to automatically generate documentation for this plugin. We use the asciidoc format to write documentation so any comments in the source code will be first converted into asciidoc and then into html. All plugin documentation are placed under one [central location](http://www.elastic.co/guide/en/logstash/current/).
+- Credential parameters:
 
-- For formatting code or config example, you can use the asciidoc `[source,ruby]` directive
-- For more asciidoc formatting tips, see the excellent reference here https://github.com/elastic/docs#asciidoc-guide
+  * aws_access_key_id, :validate => :string - optional AWS access key
+  * aws_secret_access_key, :validate => :string - optional AWS secret key
 
-## Need Help?
+	 The credential resolution logic can be described as follows:
 
-Need help? Try #logstash on freenode IRC or the https://discuss.elastic.co/c/logstash discussion forum.
+	 - User passed `aws_access_key_id` and `aws_secret_access_key` in `amazon_es` configuration
+	 - Environment variables - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET), or `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` (only recognized by Java SDK)
+	 - Credential profiles file at the default location (`~/.aws/credentials`) shared by all AWS SDKs and the AWS CLI
+	 - Instance profile credentials delivered through the Amazon EC2 metadata service
+
+- template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
+- template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
+- port (string, default 443) - Amazon Elasticsearch Service listens on port 443 for HTTPS (default) and port 80 for HTTP. Tweak this value for a custom proxy.
+- protocol (string, default https) - The protocol used to connect to the Amazon Elasticsearch Service
 
 ## Developing
 
-### 1. Plugin Developement and Testing
+### 1. Plugin Development and Testing
 
 #### Code
-- To get started, you'll need JRuby with the Bundler gem installed.
 
-- Create a new plugin or clone and existing from the GitHub [logstash-plugins](https://github.com/logstash-plugins) organization. We also provide [example plugins](https://github.com/logstash-plugins?query=example).
+1. To get started, you'll need JRuby with the Bundler gem installed.
 
-- Install dependencies
-```sh
-bundle install
-```
+2. Create a new plugin or clone and existing from the GitHub [logstash-plugins](https://github.com/logstash-plugins) organization. [Example plugins](https://github.com/logstash-plugins?query=example) exist.
+
+3. Install dependencies:
+
+   ```sh
+   bundle install
+   ```
 
 #### Test
 
-- Update your dependencies
+1. Update your dependencies:
 
-```sh
-bundle install
-```
+   ```sh
+   bundle install
+   ```
 
-- Run unit tests
+2. Run unit tests:
 
-```sh
-bundle exec rspec
-```
+   ```sh
+   bundle exec rspec
+   ```
 
-
-### 2. Running your unpublished Plugin in Logstash
+### 2. Running your unpublished plugin in Logstash
 
 #### 2.1 Run in a local Logstash clone
 
-- Edit Logstash `Gemfile` and add the local plugin path, for example:
-```ruby
-gem "logstash-filter-awesome", :path => "/your/local/logstash-filter-awesome"
-```
-- Install plugin
-```sh
-# Logstash 2.3 and higher
-bin/logstash-plugin install --no-verify
+1. Edit Logstash `Gemfile` and add the local plugin path, for example:
 
-# Prior to Logstash 2.3
-bin/plugin install --no-verify
+   ```ruby
+   gem "logstash-filter-awesome", :path => "/your/local/logstash-filter-awesome"
+   ```
 
-```
-- Run Logstash with your plugin
-```sh
-bin/logstash -e 'filter {awesome {}}'
-```
-At this point any modifications to the plugin code will be applied to this local Logstash setup. After modifying the plugin, simply rerun Logstash.
+2. Install the plugin:
+
+   ```sh
+   # Logstash 2.3 and higher
+   bin/logstash-plugin install --no-verify
+
+   # Prior to Logstash 2.3
+   bin/plugin install --no-verify
+   ```
+
+3. Run Logstash with your plugin:
+
+   ```sh
+   bin/logstash -e 'filter {awesome {}}'
+   ```
+
+At this point any modifications to the plugin code will be applied to this local Logstash setup. After modifying the plugin, simply re-run Logstash.
 
 #### 2.2 Run in an installed Logstash
-Before build your gemfile, please make sure use JRuby. Here is how you can know your local ruby version:
+
+Before build your `Gemfile`, please make sure use JRuby. Here is how you can know your local Ruby version:
+
 ```sh
 rvm list
 ```
-Please make sure you current using jruby. Here is how you can change to jruby
+
+Please make sure you current using JRuby. Here is how you can change to JRuby
+
 ```sh
 rvm jruby
 ```
 
+You can use the same **2.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory. You can also build the gem and install it using:
 
-You can use the same **2.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory or you can build the gem and install it using:
+1. Build your plugin gem:
 
-- Build your plugin gem
-```sh
-gem build logstash-filter-awesome.gemspec
-```
-- Install the plugin from the Logstash home
-```sh
-# Logstash 2.3 and higher
-bin/logstash-plugin install --no-verify
+   ```sh
+   gem build logstash-filter-awesome.gemspec
+   ```
 
-# Prior to Logstash 2.3
-bin/plugin install --no-verify
+2. Install the plugin from the Logstash home:
 
-```
-- Start Logstash and proceed to test the plugin
+   ```sh
+   # Logstash 2.3 and higher
+   bin/logstash-plugin install --no-verify
+
+   # Prior to Logstash 2.3
+   bin/plugin install --no-verify
+   ```
+
+3. Start Logstash and test the plugin.
 
 ## Contributing
 
-All contributions are welcome: ideas, patches, documentation, bug reports, complaints, and even something you drew up on a napkin.
-
-Programming is not a required skill. Whatever you've seen about open source and maintainers or community members  saying "send patches or die" - you will not see that here.
-
-It is more important to the community that you are able to contribute.
-
+All contributions are welcome: ideas, patches, documentation, bug reports, and complaints.

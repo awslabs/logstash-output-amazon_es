@@ -141,6 +141,15 @@ You can use the same **2.1** method to run your plugin in an installed Logstash 
 
 3. Start Logstash and test the plugin.
 
+## Old version support
+
+If you want to use old version of logstash-output-amazon_es, you can install with this:  
+```sh
+bin/logstash-plugin install logstash-output-amazon_es -v 2.0.0
+```
+
+
+
 ## Contributing
 
 All contributions are welcome: ideas, patches, documentation, bug reports, and complaints.

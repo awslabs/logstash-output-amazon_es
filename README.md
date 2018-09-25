@@ -6,6 +6,14 @@ This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
 This library is licensed under Apache License 2.0.
 
+## Compatibility
+
+The following table shows the versions of logstash and logstash-output-amazon_es Plugin was built with.
+
+|  logstash-output-amazon_es | Logstash |
+| ------------- | ------------- |
+| 6.0.0  | <6.0.0  |
+| 6.4.0  | >6.0.0  |
 ## Configuration for Amazon Elasticsearch Output Plugin
 
 To run the Logstash Output Amazon Elasticsearch plugin, simply add a configuration following the below documentation.

@@ -360,7 +360,7 @@ module LogStash; module Outputs; class ElasticSearch;
     end
 
     def template_put(name, template)
-      path = "_template/#{name}"
+      path = "/_template/#{name}"
       logger.info("Installing amazon_es template to #{path}")
       @pool.put(path, nil, LogStash::Json.dump(template))
     end

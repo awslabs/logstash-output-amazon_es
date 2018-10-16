@@ -14,6 +14,7 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | ------------- | ------------- |
 | 6.0.0  | <6.0.0  |
 | 6.4.0  | >6.0.0  |
+
 ## Configuration for Amazon Elasticsearch Output Plugin
 
 To run the Logstash Output Amazon Elasticsearch plugin, simply add a configuration following the below documentation.
@@ -57,6 +58,7 @@ output {
 - port (string, default 443) - Amazon Elasticsearch Service listens on port 443 for HTTPS (default) and port 80 for HTTP. Tweak this value for a custom proxy.
 - protocol (string, default https) - The protocol used to connect to the Amazon Elasticsearch Service
 
+After 6.4.0, users can't set batch size in this output plugin config. However, users can still set batch size in logstash.yml file.
 ## Developing
 
 ### 1. Plugin Development and Testing

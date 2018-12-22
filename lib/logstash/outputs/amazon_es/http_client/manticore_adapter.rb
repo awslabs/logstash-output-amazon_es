@@ -33,12 +33,15 @@ module LogStash; module Outputs; class ElasticSearch; class HttpClient;
       @port =  options[:port] || 9200
       @protocol =  options[:protocol] || 'http'
       @region =   options[:region] || 'us-east-1'
-      @aws_access_key_id =  options[:aws_access_key_id] || nil
-      @aws_secret_access_key = options[:aws_secret_access_key] || nil
-      @session_token = options[:session_token] || nil
-      @profile = options[:profile] || 'default'
-      @instance_cred_retries = options[:instance_profile_credentials_retries] || 0
-      @instance_cred_timeout = options[:instance_profile_credentials_timeout] || 1
+      aws_access_key_id =  options[:aws_access_key_id] || nil
+      aws_secret_access_key = options[:aws_secret_access_key] || nil
+      session_token = options[:session_token] || nil
+      profile = options[:profile] || 'default'
+      instance_cred_retries = options[:instance_profile_credentials_retries] || 0
+      instance_cred_timeout = options[:instance_profile_credentials_timeout] || 1
+
+      credential_config = CredentialConfig.new(aws_access_key_id, aws_secret_access_key, session_token, profile, instance_cred_retries, instance_cred_timeout, @region)
+      @credentials = Aws::CredentialProviderChain.new(credential_config).resolve
 
       if options[:proxy]
         options[:proxy] = manticore_proxy_hash(options[:proxy])
@@ -102,13 +105,7 @@ module LogStash; module Outputs; class ElasticSearch; class HttpClient;
       key = Seahorse::Client::Http::Request.new(options={:endpoint=>url, :http_method => method.to_s.upcase,
                                                        :headers => params[:headers],:body => params[:body]})
 
-
-
-      credential_config = CredentialConfig.new(@aws_access_key_id, @aws_secret_access_key, @session_token, @profile, @instance_cred_retries, @instance_cred_timeout, @region)
-
-
-      credentials = Aws::CredentialProviderChain.new(credential_config).resolve
-      aws_signer = Aws::Signers::V4.new(credentials, 'es', @region )
+      aws_signer = Aws::Signers::V4.new(@credentials, 'es', @region )
 
 
       signed_key =  aws_signer.sign(key)

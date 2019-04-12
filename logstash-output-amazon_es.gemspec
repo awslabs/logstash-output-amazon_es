@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name            = 'logstash-output-amazon_es'
-  s.version         = '6.4.1'
+  s.version         = '6.4.2'
   s.licenses        = ['Apache-2.0']
   s.summary         = "Logstash Output to Amazon Elasticsearch Service"
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"

@@ -15,9 +15,9 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.0.0  | <6.0.0  |
 | 6.4.0  | >6.0.0  |
 
-## Configuration for Amazon Elasticsearch Output Plugin
+## Configuration for Amazon Elasticsearch Service Output Plugin
 
-To run the Logstash Output Amazon Elasticsearch plugin, simply add a configuration following the below documentation.
+To run the Logstash Output Amazon Elasticsearch Service plugin, simply add a configuration following the below documentation.
 
 An example configuration:
 

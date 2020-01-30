@@ -15,6 +15,8 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.0.0  | <6.0.0  |
 | 6.4.0  | >6.0.0  |
 
+logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
+
 ## Configuration for Amazon Elasticsearch Service Output Plugin
 
 To run the Logstash Output Amazon Elasticsearch Service plugin, simply add a configuration following the below documentation.
@@ -46,12 +48,12 @@ output {
   * aws_access_key_id, :validate => :string - optional AWS access key
   * aws_secret_access_key, :validate => :string - optional AWS secret key
 
-	 The credential resolution logic can be described as follows:
+   The credential resolution logic can be described as follows:
 
-	 - User passed `aws_access_key_id` and `aws_secret_access_key` in `amazon_es` configuration
-	 - Environment variables - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET), or `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` (only recognized by Java SDK)
-	 - Credential profiles file at the default location (`~/.aws/credentials`) shared by all AWS SDKs and the AWS CLI
-	 - Instance profile credentials delivered through the Amazon EC2 metadata service
+   - User passed `aws_access_key_id` and `aws_secret_access_key` in `amazon_es` configuration
+   - Environment variables - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` (RECOMMENDED since they are recognized by all the AWS SDKs and CLI except for .NET), or `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` (only recognized by Java SDK)
+   - Credential profiles file at the default location (`~/.aws/credentials`) shared by all AWS SDKs and the AWS CLI
+   - Instance profile credentials delivered through the Amazon EC2 metadata service
 
 - template (path) - You can set the path to your own template here, if you so desire. If not set, the included template will be used.
 - template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch

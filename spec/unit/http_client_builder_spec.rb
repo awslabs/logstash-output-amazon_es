@@ -3,9 +3,9 @@ require "logstash/outputs/amazon_es"
 require "logstash/outputs/amazon_es/http_client"
 require "logstash/outputs/amazon_es/http_client_builder"
 
-describe LogStash::Outputs::ElasticSearch::HttpClientBuilder do
+describe LogStash::Outputs::AmazonElasticSearch::HttpClientBuilder do
   describe "auth setup with url encodable passwords" do
-    let(:klass) { LogStash::Outputs::ElasticSearch::HttpClientBuilder }
+    let(:klass) { LogStash::Outputs::AmazonElasticSearch::HttpClientBuilder }
     let(:user) { "foo@bar"}
     let(:password) {"baz@blah" }
     let(:password_secured) do

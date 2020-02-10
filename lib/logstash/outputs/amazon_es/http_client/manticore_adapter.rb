@@ -3,7 +3,7 @@ require 'cgi'
 require 'aws-sdk-core'
 require 'uri'
 
-module LogStash; module Outputs; class ElasticSearch; class HttpClient;
+module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
   DEFAULT_HEADERS = { "content-type" => "application/json" }
 
   CredentialConfig = Struct.new(
@@ -123,7 +123,7 @@ module LogStash; module Outputs; class ElasticSearch; class HttpClient;
       # template installation. We might need a better story around this later
       # but for our current purposes this is correct
       if resp.code < 200 || resp.code > 299 && resp.code != 404
-        raise ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError.new(resp.code, request_uri, body, resp.body)
+        raise ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError.new(resp.code, request_uri, body, resp.body)
       end
 
       resp

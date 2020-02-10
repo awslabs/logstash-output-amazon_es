@@ -1,6 +1,6 @@
 require "logstash/outputs/amazon_es/template_manager"
 
-module LogStash; module Outputs; class ElasticSearch;
+module LogStash; module Outputs; class AmazonElasticSearch;
   module Common
     attr_reader :client, :hosts
 
@@ -274,7 +274,7 @@ module LogStash; module Outputs; class ElasticSearch;
         es_actions = actions.map {|action_type, params, event| [action_type, params, event.to_hash]}
         response = @client.bulk(es_actions)
         response
-      rescue ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::HostUnreachableError => e
+      rescue ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::HostUnreachableError => e
         # If we can't even connect to the server let's just print out the URL (:hosts is actually a URL)
         # and let the user sort it out from there
         @logger.error(
@@ -290,7 +290,7 @@ module LogStash; module Outputs; class ElasticSearch;
         sleep_interval = sleep_for_interval(sleep_interval)
         @bulk_request_metrics.increment(:failures)
         retry unless @stopping.true?
-      rescue ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::NoConnectionAvailableError => e
+      rescue ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::NoConnectionAvailableError => e
         @logger.error(
           "Attempted to send a bulk request to elasticsearch, but no there are no living connections in the connection pool. Perhaps Elasticsearch is unreachable or down?",
           :error_message => e.message,
@@ -301,7 +301,7 @@ module LogStash; module Outputs; class ElasticSearch;
         sleep_interval = next_sleep_interval(sleep_interval)
         @bulk_request_metrics.increment(:failures)
         retry unless @stopping.true?
-      rescue ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError => e
+      rescue ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError => e
         @bulk_request_metrics.increment(:failures)
         log_hash = {:code => e.response_code, :url => e.url.sanitized.to_s}
         log_hash[:body] = e.response_body if @logger.debug? # Generally this is too verbose

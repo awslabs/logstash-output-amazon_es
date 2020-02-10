@@ -2,7 +2,7 @@ require_relative "../../../spec/es_spec_helper"
 require "flores/random"
 require "logstash/outputs/amazon_es"
 
-describe LogStash::Outputs::ElasticSearch do
+describe LogStash::Outputs::AmazonElasticSearch do
   subject { described_class.new(options) }
   let(:options) { { "aws_access_key_id" => "AAAAAAAAAAAAAAAAAAAA",
                     "aws_secret_access_key" => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"} }
@@ -222,7 +222,7 @@ describe LogStash::Outputs::ElasticSearch do
     context "429 errors" do
       let(:event) { ::LogStash::Event.new("foo" => "bar") }
       let(:error) do
-        ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError.new(
+        ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError.new(
           429, double("url").as_null_object, double("request body"), double("response body")
         )
       end

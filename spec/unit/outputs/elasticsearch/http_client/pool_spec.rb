@@ -2,9 +2,9 @@ require "logstash/devutils/rspec/spec_helper"
 require "logstash/outputs/amazon_es/http_client"
 require "json"
 
-describe LogStash::Outputs::ElasticSearch::HttpClient::Pool do
+describe LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool do
   let(:logger) { Cabin::Channel.get }
-  let(:adapter) { LogStash::Outputs::ElasticSearch::HttpClient::ManticoreAdapter.new(logger,
+  let(:adapter) { LogStash::Outputs::AmazonElasticSearch::HttpClient::ManticoreAdapter.new(logger,
                                                                                      {:aws_access_key_id => 'AAAAAAAAAAAAAAAAAAAA',
                                                                                               :aws_secret_access_key => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}) }
   let(:initial_urls) { [::LogStash::Util::SafeURI.new("http://localhost:9200")] }

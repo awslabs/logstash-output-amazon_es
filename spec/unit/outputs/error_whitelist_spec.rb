@@ -14,7 +14,7 @@ describe "whitelisting error types in expected behavior" do
                     "aws_access_key_id" => "AAAAAAAAAAAAAAAAAAAA",
                     "aws_secret_access_key" => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"} }
 
-  subject { LogStash::Outputs::ElasticSearch.new(settings) }
+  subject { LogStash::Outputs::AmazonElasticSearch.new(settings) }
 
   before :each do
     allow(subject.logger).to receive(:warn)

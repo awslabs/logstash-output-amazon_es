@@ -1,6 +1,5 @@
 require "logstash/devutils/rspec/spec_helper"
 require 'manticore'
-require 'elasticsearch'
 
 # by default exclude secure_integration tests unless requested
 # normal integration specs are already excluded by devutils' spec helper
@@ -11,10 +10,6 @@ end
 module ESHelper
   def get_host_port
     "127.0.0.1"
-  end
-
-  def get_client
-    Elasticsearch::Client.new(:hosts => [get_host_port])
   end
 
   def self.es_version

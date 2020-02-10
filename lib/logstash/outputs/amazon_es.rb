@@ -83,7 +83,7 @@ require "forwardable"
 # For requests compression, regardless of the Elasticsearch version, users have to enable `http_compression` 
 # setting in their Logstash config file.
 #
-class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
+class LogStash::Outputs::AmazonElasticSearch < LogStash::Outputs::Base
   declare_threadsafe!
 
   require "logstash/outputs/amazon_es/http_client"
@@ -92,10 +92,10 @@ class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
   require "logstash/outputs/amazon_es/common"
 
   # Protocol agnostic (i.e. non-http, non-java specific) configs go here
-  include(LogStash::Outputs::ElasticSearch::CommonConfigs)
+  include(LogStash::Outputs::AmazonElasticSearch::CommonConfigs)
 
   # Protocol agnostic methods
-  include(LogStash::Outputs::ElasticSearch::Common)
+  include(LogStash::Outputs::AmazonElasticSearch::Common)
 
   config_name "amazon_es"
 
@@ -250,7 +250,7 @@ class LogStash::Outputs::ElasticSearch < LogStash::Outputs::Base
 
   def build_client
     params["metric"] = metric
-    @client ||= ::LogStash::Outputs::ElasticSearch::HttpClientBuilder.build(@logger, @hosts, params)
+    @client ||= ::LogStash::Outputs::AmazonElasticSearch::HttpClientBuilder.build(@logger, @hosts, params)
   end
 
   def close

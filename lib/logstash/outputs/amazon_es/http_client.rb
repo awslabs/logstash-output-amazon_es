@@ -7,7 +7,7 @@ require 'cgi'
 require 'zlib'
 require 'stringio'
 
-module LogStash; module Outputs; class ElasticSearch;
+module LogStash; module Outputs; class AmazonElasticSearch;
   # This is a constant instead of a config option because
   # there really isn't a good reason to configure it.
   #
@@ -152,7 +152,7 @@ module LogStash; module Outputs; class ElasticSearch;
 
       if response.code != 200
         url = ::LogStash::Util::SafeURI.new(response.final_url)
-        raise ::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError.new(
+        raise ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError.new(
           response.code, url, body_stream.to_s, response.body
         )
       end
@@ -292,7 +292,7 @@ module LogStash; module Outputs; class ElasticSearch;
 
       adapter_options[:aws_secret_access_key] = options[:aws_secret_access_key]
 
-      adapter_class = ::LogStash::Outputs::ElasticSearch::HttpClient::ManticoreAdapter
+      adapter_class = ::LogStash::Outputs::AmazonElasticSearch::HttpClient::ManticoreAdapter
       adapter = adapter_class.new(@logger, adapter_options)
     end
     
@@ -310,7 +310,7 @@ module LogStash; module Outputs; class ElasticSearch;
       }
       pool_options[:scheme] = self.scheme if self.scheme
 
-      pool_class = ::LogStash::Outputs::ElasticSearch::HttpClient::Pool
+      pool_class = ::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool
       full_urls = @options[:hosts].map {|h| host_to_url(h) }
       pool = pool_class.new(@logger, adapter, full_urls, pool_options)
       pool.start

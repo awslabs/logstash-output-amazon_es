@@ -1,6 +1,6 @@
 require 'cgi'
 
-module LogStash; module Outputs; class ElasticSearch;
+module LogStash; module Outputs; class AmazonElasticSearch;
   module HttpClientBuilder
     def self.build(logger, hosts, params)
       client_settings = {
@@ -105,7 +105,7 @@ module LogStash; module Outputs; class ElasticSearch;
     end
 
     def self.create_http_client(options)
-      LogStash::Outputs::ElasticSearch::HttpClient.new(options)
+      LogStash::Outputs::AmazonElasticSearch::HttpClient.new(options)
     end
 
     def self.setup_ssl(logger, params)

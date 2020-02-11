@@ -1,4 +1,4 @@
-module LogStash; module Outputs; class ElasticSearch
+module LogStash; module Outputs; class AmazonElasticSearch
   class TemplateManager
     # To be mixed into the amazon_es plugin base
     def self.install_template(plugin)

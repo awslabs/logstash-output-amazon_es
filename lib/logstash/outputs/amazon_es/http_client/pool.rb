@@ -1,4 +1,4 @@
-module LogStash; module Outputs; class ElasticSearch; class HttpClient;
+module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
   class Pool
     class NoConnectionAvailableError < Error; end
     class BadResponseCodeError < Error

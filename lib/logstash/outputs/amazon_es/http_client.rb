@@ -142,12 +142,16 @@ module LogStash; module Outputs; class AmazonElasticSearch;
     def bulk_send(body_stream)
       params = http_compression ? {:headers => {"Content-Encoding" => "gzip"}} : {}
       # Discard the URL
+      starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       response = @pool.post(@bulk_path, params, body_stream.string)
       if !body_stream.closed?
         body_stream.truncate(0)
         body_stream.seek(0)
       end
-
+      ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      elapsed = ending - starting
+      elapsed = elapsed*1000.0
+      logger.info("ES bulk request with reponse code #{response.code.to_s} took #{elapsed} milliseconds")
       @bulk_response_metrics.increment(response.code.to_s)
 
       if response.code != 200

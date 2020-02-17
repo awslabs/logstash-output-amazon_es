@@ -116,18 +116,21 @@ module LogStash; module Outputs; class AmazonElasticSearch;
         stream_writer = body_stream
       end
       bulk_responses = []
+      action_counter = 0
       bulk_actions.each do |action|
         as_json = action.is_a?(Array) ?
                     action.map {|line| LogStash::Json.dump(line)}.join("\n") :
                     LogStash::Json.dump(action)
         as_json << "\n"
         if (body_stream.size + as_json.bytesize) > TARGET_BULK_BYTES
-          bulk_responses << bulk_send(body_stream) unless body_stream.size == 0
+          bulk_responses << bulk_send(body_stream, action_counter) unless body_stream.size == 0
+          action_counter = 0
         end
         stream_writer.write(as_json)
+        action_counter = action_counter + 1
       end
       stream_writer.close if http_compression
-      bulk_responses << bulk_send(body_stream) if body_stream.size > 0
+      bulk_responses << bulk_send(body_stream, action_counter) if body_stream.size > 0
       body_stream.close if !http_compression
       join_bulk_responses(bulk_responses)
     end
@@ -139,7 +142,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
       }
     end
 
-    def bulk_send(body_stream)
+    def bulk_send(body_stream, action_count)
       params = http_compression ? {:headers => {"Content-Encoding" => "gzip"}} : {}
       # Discard the URL
       starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -151,7 +154,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
       ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       elapsed = ending - starting
       elapsed = elapsed*1000.0
-      logger.info("ES bulk request with reponse code #{response.code.to_s} took #{elapsed} milliseconds")
+      logger.info("ES bulk request with #{action_count} docs and reponse code #{response.code.to_s} took #{elapsed} milliseconds")
       @bulk_response_metrics.increment(response.code.to_s)
 
       if response.code != 200

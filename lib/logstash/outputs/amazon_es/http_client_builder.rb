@@ -101,7 +101,9 @@ module LogStash; module Outputs; class AmazonElasticSearch;
                                               :port => params["port"],
                                               :region => params["region"],
                                               :aws_access_key_id => params["aws_access_key_id"],
-                                              :aws_secret_access_key => params["aws_secret_access_key"]))
+                                              :aws_secret_access_key => params["aws_secret_access_key"],
+                                              :max_bulk_bytes => params["max_bulk_bytes"])
+                                              )
     end
 
     def self.create_http_client(options)

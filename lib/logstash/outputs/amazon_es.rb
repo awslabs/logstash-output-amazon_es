@@ -248,6 +248,9 @@ class LogStash::Outputs::AmazonElasticSearch < LogStash::Outputs::Base
   # Custom Headers to send on each request to amazon_es nodes
   config :custom_headers, :validate => :hash, :default => {}
 
+  #Max builk size in bytes
+  config :max_bulk_bytes, :validate => :number, :default => 20 * 1024 * 1024
+
   def build_client
     params["metric"] = metric
     @client ||= ::LogStash::Outputs::AmazonElasticSearch::HttpClientBuilder.build(@logger, @hosts, params)

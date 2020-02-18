@@ -24,7 +24,9 @@ module LogStash; module Outputs; class AmazonElasticSearch;
   TARGET_BULK_BYTES = 20 * 1024 * 1024 # 20MiB
 
   class HttpClient
-    attr_reader :client, :options, :logger, :pool, :action_count, :recv_count
+    attr_reader :client, :options, :logger, :pool, :action_count, :recv_count, :target_bulk_bytes
+    
+  
     # This is here in case we use DEFAULT_OPTIONS in the future
     # DEFAULT_OPTIONS = {
     #   :setting => value
@@ -54,6 +56,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
       @metric = options[:metric]
       @bulk_request_metrics = @metric.namespace(:bulk_requests)
       @bulk_response_metrics = @bulk_request_metrics.namespace(:responses)
+      @target_bulk_bytes = options[:max_bulk_bytes] 
 
       # Again, in case we use DEFAULT_OPTIONS in the future, uncomment this.
       # @options = DEFAULT_OPTIONS.merge(options)
@@ -121,7 +124,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
                     action.map {|line| LogStash::Json.dump(line)}.join("\n") :
                     LogStash::Json.dump(action)
         as_json << "\n"
-        if (body_stream.size + as_json.bytesize) > TARGET_BULK_BYTES
+        if (body_stream.size + as_json.bytesize) > @target_bulk_bytes
           bulk_responses << bulk_send(body_stream) unless body_stream.size == 0
         end
         stream_writer.write(as_json)

@@ -59,6 +59,7 @@ output {
 - template_name (string, default => "logstash") - defines how the template is named inside Elasticsearch
 - port (string, default 443) - Amazon Elasticsearch Service listens on port 443 for HTTPS (default) and port 80 for HTTP. Tweak this value for a custom proxy.
 - protocol (string, default https) - The protocol used to connect to the Amazon Elasticsearch Service
+- max_bulk_bytes - The max size for a bulk request in bytes. Default is 20MB. It is recommended not to change this value unless needed. For guidance on changing this value, please consult the table for network limits for your instance type: https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html
 
 After 6.4.0, users can't set batch size in this output plugin config. However, users can still set batch size in logstash.yml file.
 ## Developing

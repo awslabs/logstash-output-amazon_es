@@ -8,21 +8,6 @@ require 'zlib'
 require 'stringio'
 
 module LogStash; module Outputs; class AmazonElasticSearch;
-  # This is a constant instead of a config option because
-  # there really isn't a good reason to configure it.
-  #
-  # The criteria used are:
-  # 1. We need a number that's less than 100MiB because ES
-  #    won't accept bulks larger than that.
-  # 2. It must be large enough to amortize the connection constant
-  #    across multiple requests.
-  # 3. It must be small enough that even if multiple threads hit this size
-  #    we won't use a lot of heap.
-  #
-  # We wound up agreeing that a number greater than 10 MiB and less than 100MiB
-  # made sense. We picked one on the lowish side to not use too much heap.
-  TARGET_BULK_BYTES = 20 * 1024 * 1024 # 20MiB
-
   class HttpClient
     attr_reader :client, :options, :logger, :pool, :action_count, :recv_count, :target_bulk_bytes
     

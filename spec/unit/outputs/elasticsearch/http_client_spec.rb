@@ -12,7 +12,8 @@ describe LogStash::Outputs::AmazonElasticSearch::HttpClient do
       :protocol => "http",
       :port => 9200,
       :aws_access_key_id => "AAAAAAAAAAAAAAAAAAAA",
-      :aws_secret_access_key => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      :aws_secret_access_key => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      :max_bulk_bytes => 20 * 1024 * 1024
     }
 
     if !ssl.nil? # Shortcut to set this
@@ -29,6 +30,7 @@ describe LogStash::Outputs::AmazonElasticSearch::HttpClient do
     let(:ipv6_hostname) { "[::1]" }
     let(:ipv4_hostname) { "127.0.0.1" }
     let(:port) { 9200 }
+    let(:max_bulk_bytes) { 20 * 1024 * 1024 }
     let(:protocol) {"http"}
     let(:aws_access_key_id) {"AAAAAAAAAAAAAAAAAAAA"}
     let(:aws_secret_access_key) {"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}
@@ -163,7 +165,7 @@ describe LogStash::Outputs::AmazonElasticSearch::HttpClient do
     ]}
 
     context "if a message is over TARGET_BULK_BYTES" do
-      let(:target_bulk_bytes) { LogStash::Outputs::AmazonElasticSearch::TARGET_BULK_BYTES }
+      let(:target_bulk_bytes) { 20 * 1024 * 1024 }
       let(:message) { "a" * (target_bulk_bytes + 1) }
 
       it "should be handled properly" do
@@ -189,7 +191,7 @@ describe LogStash::Outputs::AmazonElasticSearch::HttpClient do
       end
 
       context "if one exceeds TARGET_BULK_BYTES" do
-        let(:target_bulk_bytes) { LogStash::Outputs::AmazonElasticSearch::TARGET_BULK_BYTES }
+        let(:target_bulk_bytes) { 20 * 1024 * 1024 }
         let(:message1) { "a" * (target_bulk_bytes + 1) }
         it "executes two bulk_send operations" do
           allow(subject).to receive(:join_bulk_responses)

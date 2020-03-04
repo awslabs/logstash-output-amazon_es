@@ -8,23 +8,10 @@ require 'zlib'
 require 'stringio'
 
 module LogStash; module Outputs; class AmazonElasticSearch;
-  # This is a constant instead of a config option because
-  # there really isn't a good reason to configure it.
-  #
-  # The criteria used are:
-  # 1. We need a number that's less than 100MiB because ES
-  #    won't accept bulks larger than that.
-  # 2. It must be large enough to amortize the connection constant
-  #    across multiple requests.
-  # 3. It must be small enough that even if multiple threads hit this size
-  #    we won't use a lot of heap.
-  #
-  # We wound up agreeing that a number greater than 10 MiB and less than 100MiB
-  # made sense. We picked one on the lowish side to not use too much heap.
-  TARGET_BULK_BYTES = 20 * 1024 * 1024 # 20MiB
-
   class HttpClient
-    attr_reader :client, :options, :logger, :pool, :action_count, :recv_count
+    attr_reader :client, :options, :logger, :pool, :action_count, :recv_count, :max_bulk_bytes
+    
+  
     # This is here in case we use DEFAULT_OPTIONS in the future
     # DEFAULT_OPTIONS = {
     #   :setting => value
@@ -54,6 +41,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
       @metric = options[:metric]
       @bulk_request_metrics = @metric.namespace(:bulk_requests)
       @bulk_response_metrics = @bulk_request_metrics.namespace(:responses)
+      @max_bulk_bytes = options[:max_bulk_bytes] 
 
       # Again, in case we use DEFAULT_OPTIONS in the future, uncomment this.
       # @options = DEFAULT_OPTIONS.merge(options)
@@ -121,7 +109,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
                     action.map {|line| LogStash::Json.dump(line)}.join("\n") :
                     LogStash::Json.dump(action)
         as_json << "\n"
-        if (body_stream.size + as_json.bytesize) > TARGET_BULK_BYTES
+        if (body_stream.size + as_json.bytesize) > @max_bulk_bytes
           bulk_responses << bulk_send(body_stream) unless body_stream.size == 0
         end
         stream_writer.write(as_json)

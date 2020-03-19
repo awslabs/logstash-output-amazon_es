@@ -101,7 +101,7 @@ Note: Please make sure the root file path for bundler and gem is under jruby, i.
 1. Update your dependencies:
 
    ```sh
-   bundle install
+   bundle update
    ```
 
 2. Run unit tests:

@@ -1,6 +1,6 @@
 require 'cgi'
 
-module LogStash; module Outputs; class ElasticSearch;
+module LogStash; module Outputs; class AmazonElasticSearch;
   module HttpClientBuilder
     def self.build(logger, hosts, params)
       client_settings = {
@@ -101,11 +101,13 @@ module LogStash; module Outputs; class ElasticSearch;
                                               :port => params["port"],
                                               :region => params["region"],
                                               :aws_access_key_id => params["aws_access_key_id"],
-                                              :aws_secret_access_key => params["aws_secret_access_key"]))
+                                              :aws_secret_access_key => params["aws_secret_access_key"],
+                                              :max_bulk_bytes => params["max_bulk_bytes"])
+                                              )
     end
 
     def self.create_http_client(options)
-      LogStash::Outputs::ElasticSearch::HttpClient.new(options)
+      LogStash::Outputs::AmazonElasticSearch::HttpClient.new(options)
     end
 
     def self.setup_ssl(logger, params)

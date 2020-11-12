@@ -3,7 +3,7 @@ require "logstash/outputs/amazon_es/http_client"
 require "java"
 require "json"
 
-describe LogStash::Outputs::ElasticSearch::TemplateManager do
+describe LogStash::Outputs::AmazonElasticSearch::TemplateManager do
 
   describe ".default_template_path" do
     context "amazon_es 1.x" do

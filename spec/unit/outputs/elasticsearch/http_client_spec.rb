@@ -2,7 +2,7 @@ require "logstash/devutils/rspec/spec_helper"
 require "logstash/outputs/amazon_es/http_client"
 require "java"
 
-describe LogStash::Outputs::ElasticSearch::HttpClient do
+describe LogStash::Outputs::AmazonElasticSearch::HttpClient do
   let(:ssl) { nil }
   let(:base_options) do
     opts = {
@@ -12,7 +12,8 @@ describe LogStash::Outputs::ElasticSearch::HttpClient do
       :protocol => "http",
       :port => 9200,
       :aws_access_key_id => "AAAAAAAAAAAAAAAAAAAA",
-      :aws_secret_access_key => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      :aws_secret_access_key => "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      :max_bulk_bytes => 20 * 1024 * 1024
     }
 
     if !ssl.nil? # Shortcut to set this
@@ -29,6 +30,7 @@ describe LogStash::Outputs::ElasticSearch::HttpClient do
     let(:ipv6_hostname) { "[::1]" }
     let(:ipv4_hostname) { "127.0.0.1" }
     let(:port) { 9200 }
+    let(:max_bulk_bytes) { 20 * 1024 * 1024 }
     let(:protocol) {"http"}
     let(:aws_access_key_id) {"AAAAAAAAAAAAAAAAAAAA"}
     let(:aws_secret_access_key) {"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}
@@ -163,7 +165,7 @@ describe LogStash::Outputs::ElasticSearch::HttpClient do
     ]}
 
     context "if a message is over TARGET_BULK_BYTES" do
-      let(:target_bulk_bytes) { LogStash::Outputs::ElasticSearch::TARGET_BULK_BYTES }
+      let(:target_bulk_bytes) { 20 * 1024 * 1024 }
       let(:message) { "a" * (target_bulk_bytes + 1) }
 
       it "should be handled properly" do
@@ -189,7 +191,7 @@ describe LogStash::Outputs::ElasticSearch::HttpClient do
       end
 
       context "if one exceeds TARGET_BULK_BYTES" do
-        let(:target_bulk_bytes) { LogStash::Outputs::ElasticSearch::TARGET_BULK_BYTES }
+        let(:target_bulk_bytes) { 20 * 1024 * 1024 }
         let(:message1) { "a" * (target_bulk_bytes + 1) }
         it "executes two bulk_send operations" do
           allow(subject).to receive(:join_bulk_responses)
@@ -201,7 +203,7 @@ describe LogStash::Outputs::ElasticSearch::HttpClient do
   end
 
   describe "sniffing" do
-    let(:client) { LogStash::Outputs::ElasticSearch::HttpClient.new(base_options.merge(client_opts)) }
+    let(:client) { LogStash::Outputs::AmazonElasticSearch::HttpClient.new(base_options.merge(client_opts)) }
 
     context "with sniffing enabled" do
       let(:client_opts) { {:sniffing => true, :sniffing_delay => 1 } }

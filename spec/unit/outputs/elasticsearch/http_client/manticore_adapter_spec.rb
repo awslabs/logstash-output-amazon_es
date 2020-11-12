@@ -1,7 +1,7 @@
 require "logstash/devutils/rspec/spec_helper"
 require "logstash/outputs/amazon_es/http_client"
 
-describe LogStash::Outputs::ElasticSearch::HttpClient::ManticoreAdapter do
+describe LogStash::Outputs::AmazonElasticSearch::HttpClient::ManticoreAdapter do
   let(:logger) { Cabin::Channel.get }
   let(:options) { {:aws_access_key_id => 'AAAAAAAAAAAAAAAAAAAA',
                    :aws_secret_access_key => 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'} }
@@ -34,12 +34,12 @@ describe LogStash::Outputs::ElasticSearch::HttpClient::ManticoreAdapter do
       uri_with_path = uri.clone
       uri_with_path.path = "/"
 
-      expect(::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError).to receive(:new).
+      expect(::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError).to receive(:new).
         with(resp.code, uri_with_path, nil, resp.body).and_call_original
 
       expect do
         subject.perform_request(uri, :get, "/")
-      end.to raise_error(::LogStash::Outputs::ElasticSearch::HttpClient::Pool::BadResponseCodeError)
+      end.to raise_error(::LogStash::Outputs::AmazonElasticSearch::HttpClient::Pool::BadResponseCodeError)
     end
   end
 

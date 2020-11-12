@@ -15,7 +15,13 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.0.0  | <6.0.0  |
 | 6.4.0  | >6.0.0  |
 
-logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
+
+Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
+
+|  logstash-output-amazon_es | Elasticsearch |
+| ------------- | ------------- |
+| 6.4.0+  | 6.5+  |
+
 
 ## Configuration for Amazon Elasticsearch Service Output Plugin
 

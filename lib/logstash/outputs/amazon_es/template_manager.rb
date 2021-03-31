@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# See NOTICE for attribution details.
+# Modifications Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
 module LogStash; module Outputs; class AmazonElasticSearch
   class TemplateManager
     # To be mixed into the amazon_es plugin base

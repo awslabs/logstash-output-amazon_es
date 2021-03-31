@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# See NOTICE for attribution details.
+# Modifications Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
 # encoding: utf-8
 require "logstash/namespace"
 require "logstash/environment"

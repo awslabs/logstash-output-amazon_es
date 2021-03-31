@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# See NOTICE for attribution details.
+# Modifications Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
 Gem::Specification.new do |s|
   s.name            = 'logstash-output-amazon_es'
   s.version         = '7.0.1'

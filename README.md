@@ -76,7 +76,25 @@ After 6.4.0, users can't set batch size in this output plugin config. However, u
 
 1. To get started, you'll need JRuby with the Bundler gem installed.
 
-2. Create a new plugin or clone and existing from the GitHub [logstash-plugins](https://github.com/logstash-plugins) organization. [Example plugins](https://github.com/logstash-plugins?query=example) exist.
+First install rvm:
+
+   ```\curl -sSL https://get.rvm.io | bash -s stable```
+   
+Then install jruby
+
+   ```rvm install jruby```
+   
+Note: Please make sure the root file path for bundler and gem is under jruby, i.e.
+
+   ```
+   which gem
+   <Your home directory>/.rvm/rubies/jruby-*/bin/gem
+
+   which bundler
+   <Your home directory>/.rvm/rubies/jruby-*@global/bin/bundler
+   ```
+
+2. Create a new plugin or clone any existing from the GitHub [logstash-plugins](https://github.com/logstash-plugins) organization. [Example plugins](https://github.com/logstash-plugins?query=example) exist.
 
 3. Install dependencies:
 
@@ -89,7 +107,7 @@ After 6.4.0, users can't set batch size in this output plugin config. However, u
 1. Update your dependencies:
 
    ```sh
-   bundle install
+   bundle update
    ```
 
 2. Run unit tests:

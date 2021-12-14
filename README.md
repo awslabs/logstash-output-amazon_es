@@ -179,7 +179,7 @@ You can use the same **2.1** method to run your plugin in an installed Logstash 
    bin/logstash-plugin install /your/local/logstash-output-amazon_es/logstash-output-amazon_es-7.0.1-java.gem
    ```
 
-4. Start Logstash and test the plugin.
+3. Start Logstash and test the plugin.
 
 
 ## Contributing

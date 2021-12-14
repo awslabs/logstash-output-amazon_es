@@ -1,6 +1,9 @@
 # Logstash Plugin
 
-This is a plugin for [Logstash](https://github.com/elastic/logstash).
+This is a plugin for [Logstash](https://github.com/elastic/logstash) which outputs
+to [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/) 
+(successor to Amazon Elasticsearch Service) using
+[SigV4 signing](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 
 ## License
 
@@ -8,19 +11,38 @@ This library is licensed under Apache License 2.0.
 
 ## Compatibility
 
-The following table shows the versions of logstash and logstash-output-amazon_es Plugin was built with.
+The following table shows the versions of logstash and logstash-output-amazon_es plugin was built with.
 
-|  logstash-output-amazon_es | Logstash |
-| ------------- | ------------- |
-| 6.0.0  | <6.0.0  |
-| 6.4.0  | >6.0.0  |
+| logstash-output-amazon_es | Logstash |
+|---------------------------|----------|
+| 6.0.0                     | < 6.0.0  |
+| 6.4.2                     | >= 6.0.0 |
+| 7.0.1                     | >= 7.0.0 |
 
 
 Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
 
 |  logstash-output-amazon_es | Elasticsearch |
-| ------------- | ------------- |
-| 6.4.0+  | 6.5+  |
+| ------------- |----------|
+| 6.4.0+  | 6.5+     |
+
+
+## Installation
+
+To install the latest version, use the normal Logstash plugin script.
+
+```sh
+bin/logstash-plugin install logstash-output-amazon_es
+```
+
+If you want to use old version of logstash-output-amazon_es, you can use the `--version`
+flag to specify the version. For example:
+
+```sh
+bin/logstash-plugin install --version 6.4.2 logstash-output-amazon_es
+```
+
+
 
 
 ## Configuration for Amazon Elasticsearch Service Output Plugin
@@ -158,14 +180,6 @@ You can use the same **2.1** method to run your plugin in an installed Logstash 
    ```
 
 4. Start Logstash and test the plugin.
-
-## Old version support
-
-If you want to use old version of logstash-output-amazon_es, you can install with this:  
-```sh
-bin/logstash-plugin install logstash-output-amazon_es -v 2.0.0
-```
-
 
 
 ## Contributing

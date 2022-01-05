@@ -119,7 +119,8 @@ module LogStash; module Outputs; class AmazonElasticSearch;
     end
 
     def install_template
-      TemplateManager.install_template(self)
+      #Uncomment this later
+      #TemplateManager.install_template(self)
       @template_installed.make_true
     end
 

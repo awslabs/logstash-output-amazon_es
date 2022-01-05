@@ -17,7 +17,8 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       :profile,
       :instance_profile_credentials_retries,
       :instance_profile_credentials_timeout,
-      :region)
+      :region,
+      :service_name)
 
   class ManticoreAdapter
     attr_reader :manticore, :logger

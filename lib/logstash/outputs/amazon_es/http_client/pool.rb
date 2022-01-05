@@ -244,27 +244,29 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       # Try to keep locking granularity low such that we don't affect IO...
       @state_mutex.synchronize { @url_info.select {|url,meta| meta[:state] != :alive } }.each do |url,meta|
         begin
-          logger.info("Running health check to see if an Elasticsearch connection is working",
-                        :healthcheck_url => url, :path => @healthcheck_path)
-          response = perform_request_to_url(url, :head, @healthcheck_path)
-          # If no exception was raised it must have succeeded!
-          logger.warn("Restored connection to ES instance", :url => url.sanitized.to_s)
-          # We reconnected to this node, check its ES version
-          es_version = get_es_version(url)
-          @state_mutex.synchronize do
-            meta[:version] = es_version
-            major = major_version(es_version)
-            if !@maximum_seen_major_version
-              @logger.info("ES Output version determined", :es_version => major)
-              set_new_major_version(major)
-            elsif major > @maximum_seen_major_version
-              @logger.warn("Detected a node with a higher major version than previously observed. This could be the result of an amazon_es cluster upgrade.", :previous_major => @maximum_seen_major_version, :new_major => major, :node_url => url)
-              set_new_major_version(major)
-            end
-            meta[:state] = :alive
-          end
-        rescue HostUnreachableError, BadResponseCodeError => e
-          logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
+        #   logger.info("Running health check to see if an Elasticsearch connection is working",
+        #                 :healthcheck_url => url, :path => @healthcheck_path)
+        #   response = perform_request_to_url(url, :head, @healthcheck_path)
+        #   # If no exception was raised it must have succeeded!
+        #   logger.warn("Restored connection to ES instance", :url => url.sanitized.to_s)
+        #   # We reconnected to this node, check its ES version
+        #   es_version = get_es_version(url)
+        #   @state_mutex.synchronize do
+        #     meta[:version] = es_version
+        #     major = major_version(es_version)
+        #     if !@maximum_seen_major_version
+        #       @logger.info("ES Output version determined", :es_version => major)
+        #       set_new_major_version(major)
+        #     elsif major > @maximum_seen_major_version
+        #       @logger.warn("Detected a node with a higher major version than previously observed. This could be the result of an amazon_es cluster upgrade.", :previous_major => @maximum_seen_major_version, :new_major => major, :node_url => url)
+        #       set_new_major_version(major)
+        #     end
+        #     meta[:state] = :alive
+        #   end
+        # rescue HostUnreachableError, BadResponseCodeError => e
+        #   logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
+        set_new_major_version(7)
+        meta[:state] = :alive
         end
       end
     end

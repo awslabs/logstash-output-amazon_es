@@ -276,6 +276,8 @@ module LogStash; module Outputs; class AmazonElasticSearch;
 
       adapter_options[:region] = options[:region]
 
+      adapter_options[:service_name] = options[:service_name]
+
       adapter_options[:port] = options[:port]
 
       adapter_options[:protocol] = options[:protocol]

@@ -17,8 +17,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       :profile,
       :instance_profile_credentials_retries,
       :instance_profile_credentials_timeout,
-      :region,
-      :service_name)
+      :region)
 
   class ManticoreAdapter
     attr_reader :manticore, :logger
@@ -46,7 +45,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       instance_cred_retries = options[:instance_profile_credentials_retries] || 0
       instance_cred_timeout = options[:instance_profile_credentials_timeout] || 1
 
-      credential_config = CredentialConfig.new(aws_access_key_id, aws_secret_access_key, session_token, profile, instance_cred_retries, instance_cred_timeout, @region, @service_name)
+      credential_config = CredentialConfig.new(aws_access_key_id, aws_secret_access_key, session_token, profile, instance_cred_retries, instance_cred_timeout, @region)
       @credentials = Aws::CredentialProviderChain.new(credential_config).resolve
 
       if options[:proxy]

@@ -37,6 +37,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       @port =  options[:port] || 9200
       @protocol =  options[:protocol] || 'http'
       @region =   options[:region] || 'us-east-1'
+      @service_name = options[:service_name] || 'es'
       aws_access_key_id =  options[:aws_access_key_id] || nil
       aws_secret_access_key = options[:aws_secret_access_key] || nil
       session_token = options[:session_token] || nil
@@ -109,7 +110,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       key = Seahorse::Client::Http::Request.new(options={:endpoint=>url, :http_method => method.to_s.upcase,
                                                        :headers => params[:headers],:body => params[:body]})
 
-      aws_signer = Aws::Signers::V4.new(@credentials, 'es', @region )
+      aws_signer = Aws::Signers::V4.new(@credentials, @service_name, @region )
 
 
       signed_key =  aws_signer.sign(key)

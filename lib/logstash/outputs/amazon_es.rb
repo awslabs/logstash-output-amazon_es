@@ -125,11 +125,14 @@ class LogStash::Outputs::AmazonElasticSearch < LogStash::Outputs::Base
   # You can set the remote port as part of the host, or explicitly here as well
   config :port, :validate => :number, :default => 443
 
-  # Sets the protocol thats used to connect to elastisearch
+  # Sets the protocol thats used to connect to elasticsearch
   config :protocol, :validate => :string, :default => "https"
 
   #Signing specific details
   config :region, :validate => :string, :default => "us-east-1"
+
+  #Service name, default is `es`
+  config :service_name, :validate => :string, :default => "es"
   # Credential resolution logic works as follows:
   #
   # - User passed aws_access_key_id and aws_secret_access_key in aes configuration

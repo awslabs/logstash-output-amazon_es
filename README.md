@@ -90,16 +90,30 @@ output {
 - max_bulk_bytes - The max size for a bulk request in bytes. Default is 20MB. It is recommended not to change this value unless needed. For guidance on changing this value, please consult the table for network limits for your instance type: https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-limits.html#network-limits
 
 After 6.4.0, users can't set batch size in this output plugin config. However, users can still set batch size in logstash.yml file.
+
+### Advanced Optional Parameters
+
+Starting logstash-output-amazon_es v7.1.0, we have introduced the following optional parameters to resolve specific use cases:
+
+- service_name (string, default => "es") - Users can define any service name to which the plugin will send a SigV4 signed request
+- skip_healthcheck (boolean, default => false) - Boolean to skip healthcheck API and set the major ES version to 7
+- skip_template_installation (boolean, default => false) -  Boolean to allow users to skip installing templates in usecases that don't require them
+
 ## Developing
 
-### 1. Plugin Development and Testing
+### 1. Prerequisites
+To get started, you can install JRuby with the Bundler gem using [RVM](https://rvm.io/)
+
+rvm install jruby
+
+### 2. Plugin Development and Testing
 
 #### Code
 
-1. To get started, you'll need JRuby with the Bundler gem installed.
+1. Verify JRuby is already installed
 
    ```sh
-   rvm jruby-9.2.5.0
+   jruby -v
    ```
 
 
@@ -123,9 +137,9 @@ After 6.4.0, users can't set batch size in this output plugin config. However, u
    bundle exec rspec
    ```
 
-### 2. Running your unpublished plugin in Logstash
+### 3. Running your unpublished plugin in Logstash
 
-#### 2.1 Run in a local Logstash clone
+#### 3.1 Run in a local Logstash clone
 
 1. Edit Logstash `Gemfile` and add the local plugin path, for example:
 
@@ -151,7 +165,7 @@ After 6.4.0, users can't set batch size in this output plugin config. However, u
 
 At this point any modifications to the plugin code will be applied to this local Logstash setup. After modifying the plugin, simply re-run Logstash.
 
-#### 2.2 Run in an installed Logstash
+#### 3.2 Run in an installed Logstash
 
 Before build your `Gemfile`, please make sure use JRuby. Here is how you can know your local Ruby version:
 

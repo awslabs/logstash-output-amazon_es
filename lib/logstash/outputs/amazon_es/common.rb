@@ -6,7 +6,7 @@ require "logstash/outputs/amazon_es/template_manager"
 
 module LogStash; module Outputs; class AmazonElasticSearch;
   module Common
-    attr_reader :client, :hosts
+    attr_reader :client, :hosts, :skip_template_installation
 
     # These codes apply to documents, not at the request level
     DOC_DLQ_CODES = [400, 404]
@@ -119,8 +119,12 @@ module LogStash; module Outputs; class AmazonElasticSearch;
     end
 
     def install_template
-      TemplateManager.install_template(self)
-      @template_installed.make_true
+      if skip_template_installation == false
+       TemplateManager.install_template(self)
+       @template_installed.make_true
+      elsif skip_template_installation == true
+        @template_installed.make_true
+      end
     end
 
     def check_action_validity

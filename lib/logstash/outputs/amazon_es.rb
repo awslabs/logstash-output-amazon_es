@@ -261,6 +261,9 @@ class LogStash::Outputs::AmazonElasticSearch < LogStash::Outputs::Base
   #Option for user to skip Healthcheck API for a host when set to True
   config :skip_healthcheck, :validate => :boolean, :default => false
 
+  #Allow user to skip installing template when set to True
+  config :skip_template_installation, :validate => :boolean, :default => false
+
   def build_client
     params["metric"] = metric
     @client ||= ::LogStash::Outputs::AmazonElasticSearch::HttpClientBuilder.build(@logger, @hosts, params)

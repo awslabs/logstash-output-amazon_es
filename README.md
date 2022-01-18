@@ -102,7 +102,7 @@ Starting logstash-output-amazon_es v7.1.0, we have introduced the following opti
 ## Developing
 
 ### 1. Prerequisites
-To get started, you can install JRuby with the Bundler gem using [RVM](https://rvm.io/)
+To get started, you can install JRuby with the Bundler gem using [RVM](https://rvm.io/rvm/install)
 
 rvm install jruby
 

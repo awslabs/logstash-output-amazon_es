@@ -258,7 +258,7 @@ class LogStash::Outputs::AmazonElasticSearch < LogStash::Outputs::Base
   #Max bulk size in bytes
   config :max_bulk_bytes, :validate => :number, :default => 20 * 1024 * 1024
 
-  #Temporary option for user to skip Healthcheck API for a host when set to True
+  #Option for user to skip Healthcheck API for a host when set to True
   config :skip_healthcheck, :validate => :boolean, :default => false
 
   def build_client

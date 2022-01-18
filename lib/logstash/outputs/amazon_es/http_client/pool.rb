@@ -32,7 +32,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       end
     end
 
-    attr_reader :logger, :adapter, :sniffing, :sniffer_delay, :resurrect_delay, :healthcheck_path, :sniffing_path, :bulk_path
+    attr_reader :logger, :adapter, :sniffing, :sniffer_delay, :resurrect_delay, :healthcheck_path, :sniffing_path, :bulk_path, :skip_healthcheck
 
     ROOT_URI_PATH = '/'.freeze
 
@@ -44,6 +44,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       :resurrect_delay => 5,
       :sniffing => false,
       :sniffer_delay => 10,
+      :skip_healthcheck => false,
     }.freeze
 
     def initialize(logger, adapter, initial_urls=[], options={})
@@ -61,6 +62,7 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
         @resurrect_delay = merged[:resurrect_delay]
         @sniffing = merged[:sniffing]
         @sniffer_delay = merged[:sniffer_delay]
+        @skip_healthcheck = merged[:skip_healthcheck]
       end
 
       # Used for all concurrent operations in this class
@@ -242,29 +244,34 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
 
     def healthcheck!
       # Try to keep locking granularity low such that we don't affect IO...
-      @state_mutex.synchronize { @url_info.select {|url,meta| meta[:state] != :alive } }.each do |url,meta|
+      @state_mutex.synchronize { @url_info.select { |url, meta| meta[:state] != :alive } }.each do |url, meta|
         begin
-          logger.info("Running health check to see if an Elasticsearch connection is working",
+          if skip_healthcheck == false
+            logger.info("Running health check to see if an Elasticsearch connection is working",
                         :healthcheck_url => url, :path => @healthcheck_path)
-          response = perform_request_to_url(url, :head, @healthcheck_path)
-          # If no exception was raised it must have succeeded!
-          logger.warn("Restored connection to ES instance", :url => url.sanitized.to_s)
-          # We reconnected to this node, check its ES version
-          es_version = get_es_version(url)
-          @state_mutex.synchronize do
-            meta[:version] = es_version
-            major = major_version(es_version)
-            if !@maximum_seen_major_version
-              @logger.info("ES Output version determined", :es_version => major)
-              set_new_major_version(major)
-            elsif major > @maximum_seen_major_version
-              @logger.warn("Detected a node with a higher major version than previously observed. This could be the result of an amazon_es cluster upgrade.", :previous_major => @maximum_seen_major_version, :new_major => major, :node_url => url)
-              set_new_major_version(major)
+            response = perform_request_to_url(url, :head, @healthcheck_path)
+            # If no exception was raised it must have succeeded!
+            logger.warn("Restored connection to ES instance", :url => url.sanitized.to_s)
+            # We reconnected to this node, check its ES version
+            es_version = get_es_version(url)
+            @state_mutex.synchronize do
+              meta[:version] = es_version
+              major = major_version(es_version)
+              if !@maximum_seen_major_version
+                @logger.info("ES Output version determined", :es_version => major)
+                set_new_major_version(major)
+              elsif major > @maximum_seen_major_version
+                @logger.warn("Detected a node with a higher major version than previously observed. This could be the result of an amazon_es cluster upgrade.", :previous_major => @maximum_seen_major_version, :new_major => major, :node_url => url)
+                set_new_major_version(major)
+              end
+              meta[:state] = :alive
+            rescue HostUnreachableError, BadResponseCodeError => e
+              logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
             end
+          elsif skip_healthcheck == true
+            set_new_major_version(7)
             meta[:state] = :alive
           end
-        rescue HostUnreachableError, BadResponseCodeError => e
-          logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
         end
       end
     end

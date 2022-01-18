@@ -29,7 +29,7 @@ module LogStash; module Outputs; class AmazonElasticSearch;
     # * `:user` - String. The user to use for authentication.
     # * `:password` - String. The password to use for authentication.
     # * `:timeout` - Float. A duration value, in seconds, after which a socket
-    #    operation or request will be aborted if not yet successfull
+    #    operation or request will be aborted if not yet successful
     # * `:client_settings` - a hash; see below for keys.
     #
     # The `client_settings` key is a has that can contain other settings:
@@ -300,7 +300,8 @@ module LogStash; module Outputs; class AmazonElasticSearch;
         :healthcheck_path => options[:healthcheck_path],
         :resurrect_delay => options[:resurrect_delay],
         :url_normalizer => self.method(:host_to_url),
-        :metric => options[:metric]
+        :metric => options[:metric],
+        :skip_healthcheck => options[:skip_healthcheck],
       }
       pool_options[:scheme] = self.scheme if self.scheme
 

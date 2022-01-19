@@ -179,7 +179,7 @@ Please make sure you current using JRuby. Here is how you can change to JRuby
 rvm jruby-9.2.5.0
 ```
 
-You can use the same **2.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory. You can also build the gem and install it using:
+You can use the same **3.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory. You can also build the gem and install it using:
 
 1. Build your plugin gem:
 

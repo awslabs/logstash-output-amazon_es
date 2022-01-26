@@ -265,13 +265,13 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
                 set_new_major_version(major)
               end
               meta[:state] = :alive
-            rescue HostUnreachableError, BadResponseCodeError => e
-              logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
             end
           elsif skip_healthcheck == true
             set_new_major_version(7)
             meta[:state] = :alive
           end
+        rescue HostUnreachableError, BadResponseCodeError => e
+          logger.warn("Attempted to resurrect connection to dead ES instance, but got an error.", url: url.sanitized.to_s, error_type: e.class, error: e.message)
         end
       end
     end

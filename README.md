@@ -18,6 +18,7 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.0.0                     | < 6.0.0  |
 | 6.4.2                     | >= 6.0.0 |
 | 7.0.1                     | >= 7.0.0 |
+| 7.1.0                     | >= 7.0.0 |
 
 
 Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
@@ -104,7 +105,9 @@ Starting logstash-output-amazon_es v7.1.0, we have introduced the following opti
 ### 1. Prerequisites
 To get started, you can install JRuby with the Bundler gem using [RVM](https://rvm.io/rvm/install)
 
-rvm install jruby
+```shell
+rvm install jruby-9.2.5.0
+```
 
 ### 2. Plugin Development and Testing
 

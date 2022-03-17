@@ -1,4 +1,63 @@
-# Logstash Plugin
+# Logstash Output Plugin
+
+
+This plugin is now in maintenance mode. We will supply bug fixes and security patches. This change is because the OpenSearch Project created a new Logstash output plugin 
+[logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) which ships events from 
+Logstash to OpenSearch 1.x and Elasticsearch 7.x clusters, and also supports SigV4 signing. Having similar functionality
+plugins can be redundant, so we plan to eventually replace this logstash-output-amazon_es plugin with the logstash-output-opensearch
+plugin.
+
+To help you migrate to [logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) plugin, please 
+find below a brief migration guide.
+
+## Migrating to logstash-output-opensearch plugin
+
+
+This guide provides instructions for existing users of logstash-output-amazon_es plugin to migrate to 
+logstash-output-opensearch plugin.
+
+### Configuration Changes
+* The plugin name will change from `amazon_es` to `opensearch`.
+* A new parameter `auth_type` will be added to the Config to support SigV4 signing.
+* The `region` parameter will move under `auth_type`.
+* Credential parameters `aws_access_key_id` and `aws_secret_access_key` will move under `auth_type`.
+* The `type` value for `auth_type` for SigV4 signing will be set to `aws_iam`.
+
+For the Logstash configuration provided in [Configuration for Amazon Elasticsearch Service Output Plugin
+](#configuration-for-amazon-elasticsearch-service-output-plugin), here's a mapped example configuration for 
+logstash-output-opensearch plugin:
+
+```
+output {        
+   opensearch {     
+          hosts => ["hostname:port"]              
+          auth_type => {    
+              type => 'aws_iam'     
+              aws_access_key_id => 'ACCESS_KEY'     
+              aws_secret_access_key => 'SECRET_KEY'     
+              region => 'us-west-2'         
+          }         
+          index  => "logstash-logs-%{+YYYY.MM.dd}"      
+   }            
+}
+```
+
+### Installation of logstash-output-opensearch plugin
+This [Installation Guide](https://opensearch.org/docs/latest/clients/logstash/index/) has instructions on installing the
+logstash-output-opensearch plugin in two ways: Linux (ARM64/X64) OR Docker (ARM64/X64).
+
+To install the latest version of logstash-output-opensearch, use the normal Logstash plugin installation command:
+```shell
+bin/logstash-plugin install logstash-output-opensearch
+```
+
+# Using the logstash-output-amazon_es plugin
+
+
+The remainder of this document is for using or developing the logstash-output-amazon_es plugin.
+
+
+## Overview
 
 This is a plugin for [Logstash](https://github.com/elastic/logstash) which outputs
 to [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/) 

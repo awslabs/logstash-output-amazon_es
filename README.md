@@ -18,6 +18,9 @@ logstash-output-opensearch plugin.
 
 ### Configuration Changes
 * The plugin name will change from `amazon_es` to `opensearch`.
+* If using HTTPS this must be explicitly configured because `opensearch` plugin does not default to it like `amazon_es` does:
+  * The protocol must be included in `hosts` as `https` (or option `ssl` added with value `true`)
+  * `port` must explicitly specified as `443`
 * A new parameter `auth_type` will be added to the Config to support SigV4 signing.
 * The `region` parameter will move under `auth_type`.
 * Credential parameters `aws_access_key_id` and `aws_secret_access_key` will move under `auth_type`.
@@ -28,17 +31,17 @@ For the Logstash configuration provided in [Configuration for Amazon Elasticsear
 logstash-output-opensearch plugin:
 
 ```
-output {        
-   opensearch {     
-          hosts => ["hostname:port"]              
-          auth_type => {    
-              type => 'aws_iam'     
-              aws_access_key_id => 'ACCESS_KEY'     
-              aws_secret_access_key => 'SECRET_KEY'     
-              region => 'us-west-2'         
-          }         
-          index  => "logstash-logs-%{+YYYY.MM.dd}"      
-   }            
+output {
+   opensearch {
+          hosts => ["https://hostname:port"]
+          auth_type => {
+              type => 'aws_iam'
+              aws_access_key_id => 'ACCESS_KEY'
+              aws_secret_access_key => 'SECRET_KEY'
+              region => 'us-west-2'
+          }
+          index  => "logstash-logs-%{+YYYY.MM.dd}"
+   }
 }
 ```
 

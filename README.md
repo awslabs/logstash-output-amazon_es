@@ -1,7 +1,7 @@
 # Logstash Output Plugin
 
 
-This plugin is now in maintenance mode. We will supply bug fixes and security patches. This change is because the OpenSearch Project created a new Logstash output plugin 
+This plugin is now in maintenance mode. We will supply bug fixes and security patches for v7.1.X, older versions are no longer supported. This change is because the OpenSearch Project created a new Logstash output plugin 
 [logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) which ships events from 
 Logstash to OpenSearch 1.x and Elasticsearch 7.x clusters, and also supports SigV4 signing. Having similar functionality
 plugins can be redundant, so we plan to eventually replace this logstash-output-amazon_es plugin with the logstash-output-opensearch

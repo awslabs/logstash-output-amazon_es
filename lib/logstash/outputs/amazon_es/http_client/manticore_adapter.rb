@@ -51,10 +51,10 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       if options[:proxy]
         options[:proxy] = manticore_proxy_hash(options[:proxy])
       end
-      
+
       @manticore = ::Manticore::Client.new(options)
     end
-    
+
     # Transform the proxy option to a hash. Manticore's support for non-hash
     # proxy options is broken. This was fixed in https://github.com/cheald/manticore/commit/34a00cee57a56148629ed0a47c329181e7319af5
     # but this is not yet released
@@ -89,12 +89,12 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       params[:body] = body if body
 
       if url.user
-        params[:auth] = { 
+        params[:auth] = {
           :user => CGI.unescape(url.user),
           # We have to unescape the password here since manticore won't do it
           # for us unless its part of the URL
-          :password => CGI.unescape(url.password), 
-          :eager => true 
+          :password => CGI.unescape(url.password),
+          :eager => true
         }
       end
 
@@ -107,16 +107,18 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
       end
 
 
-      key = Seahorse::Client::Http::Request.new(options={:endpoint=>url, :http_method => method.to_s.upcase,
+      request = Seahorse::Client::Http::Request.new(options={:endpoint=>url, :http_method => method.to_s.upcase,
                                                        :headers => params[:headers],:body => params[:body]})
 
-      aws_signer = Aws::Signers::V4.new(@credentials, @service_name, @region )
+      aws_signer = Aws::Sigv4::Signer.new(service: @service_name, region: @region, credentials_provider: @credentials)
 
-
-      signed_key =  aws_signer.sign(key)
-      params[:headers] =  params[:headers].merge(signed_key.headers)
-
-
+      signed_key = aws_signer.sign_request(
+        http_method: request.http_method,
+        url: url,
+        headers: params[:headers],
+        body: params[:body]
+      )
+      params[:headers] = params[:headers].merge(signed_key.headers)
 
       resp = @manticore.send(method.downcase, request_uri.to_s, params)
 
@@ -136,27 +138,27 @@ module LogStash; module Outputs; class AmazonElasticSearch; class HttpClient;
 
     def format_url(url, path_and_query=nil)
       request_uri = url.clone
-      
+
       # We excise auth info from the URL in case manticore itself tries to stick
       # sensitive data in a thrown exception or log data
       request_uri.user = nil
       request_uri.password = nil
 
       return request_uri.to_s if path_and_query.nil?
-      
+
       parsed_path_and_query = java.net.URI.new(path_and_query)
-      
+
       query = request_uri.query
       parsed_query = parsed_path_and_query.query
-      
+
       new_query_parts = [request_uri.query, parsed_path_and_query.query].select do |part|
         part && !part.empty? # Skip empty nil and ""
       end
-      
+
       request_uri.query = new_query_parts.join("&") unless new_query_parts.empty?
-      
+
       request_uri.path = "#{request_uri.path}/#{parsed_path_and_query.path}".gsub(/\/{2,}/, "/")
-        
+
       request_uri
     end
 

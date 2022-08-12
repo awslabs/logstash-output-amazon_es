@@ -1,19 +1,19 @@
 # Logstash Output Plugin
 
 
-This plugin is now in maintenance mode. We will supply bug fixes and security patches for v7.1.X, older versions are no longer supported. This change is because the OpenSearch Project created a new Logstash output plugin 
-[logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) which ships events from 
+This plugin is now in maintenance mode. We will supply bug fixes and security patches for v7.2.X, older versions are no longer supported. This change is because the OpenSearch Project created a new Logstash output plugin
+[logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) which ships events from
 Logstash to OpenSearch 1.x and Elasticsearch 7.x clusters, and also supports SigV4 signing. Having similar functionality
 plugins can be redundant, so we plan to eventually replace this logstash-output-amazon_es plugin with the logstash-output-opensearch
 plugin.
 
-To help you migrate to [logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) plugin, please 
+To help you migrate to [logstash-output-opensearch](https://github.com/opensearch-project/logstash-output-opensearch) plugin, please
 find below a brief migration guide.
 
 ## Migrating to logstash-output-opensearch plugin
 
 
-This guide provides instructions for existing users of logstash-output-amazon_es plugin to migrate to 
+This guide provides instructions for existing users of logstash-output-amazon_es plugin to migrate to
 logstash-output-opensearch plugin.
 
 ### Configuration Changes
@@ -27,7 +27,7 @@ logstash-output-opensearch plugin.
 * The `type` value for `auth_type` for SigV4 signing will be set to `aws_iam`.
 
 For the Logstash configuration provided in [Configuration for Amazon Elasticsearch Service Output Plugin
-](#configuration-for-amazon-elasticsearch-service-output-plugin), here's a mapped example configuration for 
+](#configuration-for-amazon-elasticsearch-service-output-plugin), here's a mapped example configuration for
 logstash-output-opensearch plugin:
 
 ```
@@ -63,7 +63,7 @@ The remainder of this document is for using or developing the logstash-output-am
 ## Overview
 
 This is a plugin for [Logstash](https://github.com/elastic/logstash) which outputs
-to [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/) 
+to [Amazon OpenSearch Service](https://aws.amazon.com/opensearch-service/)
 (successor to Amazon Elasticsearch Service) using
 [SigV4 signing](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 
@@ -81,9 +81,9 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.4.2                     | >= 6.0.0 |
 | 7.0.1                     | >= 7.0.0 |
 | 7.1.0                     | >= 7.0.0 |
+| 7.2.0                     | >= 7.0.0 |
 
-
-Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater. 
+Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater.
 
 |  logstash-output-amazon_es | Elasticsearch |
 | ------------- |----------|
@@ -105,8 +105,20 @@ flag to specify the version. For example:
 bin/logstash-plugin install --version 6.4.2 logstash-output-amazon_es
 ```
 
+Starting in 7.2.0, the aws sdk version is bumped to v3. In order for all other AWS plugins to work together, please remove pre-installed plugins and install logstash-integration-aws plugin as follows. See also https://github.com/logstash-plugins/logstash-mixin-aws/issues/38
+```
+# Remove existing logstash aws plugins and install logstash-integration-aws to keep sdk dependency the same
+# https://github.com/logstash-plugins/logstash-mixin-aws/issues/38
+/usr/share/logstash/bin/logstash-plugin remove logstash-input-s3
+/usr/share/logstash/bin/logstash-plugin remove logstash-input-sqs
+/usr/share/logstash/bin/logstash-plugin remove logstash-output-s3
+/usr/share/logstash/bin/logstash-plugin remove logstash-output-sns
+/usr/share/logstash/bin/logstash-plugin remove logstash-output-sqs
+/usr/share/logstash/bin/logstash-plugin remove logstash-output-cloudwatch
 
-
+/usr/share/logstash/bin/logstash-plugin install --version 0.1.0.pre logstash-integration-aws
+bin/logstash-plugin install --version 7.2.0 logstash-output-amazon_es
+```
 
 ## Configuration for Amazon Elasticsearch Service Output Plugin
 

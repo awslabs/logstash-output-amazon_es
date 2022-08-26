@@ -81,7 +81,7 @@ The following table shows the versions of logstash and logstash-output-amazon_es
 | 6.4.2                     | >= 6.0.0 |
 | 7.0.1                     | >= 7.0.0 |
 | 7.1.0                     | >= 7.0.0 |
-| 7.2.0                     | >= 7.0.0 |
+| 8.0.0                     | >= 7.0.0 |
 
 Also, logstash-output-amazon_es plugin versions 6.4.0 and newer are tested to be compatible with Elasticsearch 6.5 and greater.
 
@@ -105,7 +105,7 @@ flag to specify the version. For example:
 bin/logstash-plugin install --version 6.4.2 logstash-output-amazon_es
 ```
 
-Starting in 7.2.0, the aws sdk version is bumped to v3. In order for all other AWS plugins to work together, please remove pre-installed plugins and install logstash-integration-aws plugin as follows. See also https://github.com/logstash-plugins/logstash-mixin-aws/issues/38
+Starting in 8.0.0, the aws sdk version is bumped to v3. In order for all other AWS plugins to work together, please remove pre-installed plugins and install logstash-integration-aws plugin as follows. See also https://github.com/logstash-plugins/logstash-mixin-aws/issues/38
 ```
 # Remove existing logstash aws plugins and install logstash-integration-aws to keep sdk dependency the same
 # https://github.com/logstash-plugins/logstash-mixin-aws/issues/38
@@ -117,7 +117,7 @@ Starting in 7.2.0, the aws sdk version is bumped to v3. In order for all other A
 /usr/share/logstash/bin/logstash-plugin remove logstash-output-cloudwatch
 
 /usr/share/logstash/bin/logstash-plugin install --version 0.1.0.pre logstash-integration-aws
-bin/logstash-plugin install --version 7.2.0 logstash-output-amazon_es
+bin/logstash-plugin install --version 8.0.0 logstash-output-amazon_es
 ```
 
 ## Configuration for Amazon Elasticsearch Service Output Plugin

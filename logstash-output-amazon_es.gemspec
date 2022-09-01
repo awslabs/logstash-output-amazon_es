@@ -4,7 +4,7 @@
 
 Gem::Specification.new do |s|
   s.name            = 'logstash-output-amazon_es'
-  s.version         = '7.1.0'
+  s.version         = '8.0.0'
   s.licenses        = ['Apache-2.0']
   s.summary         = "Logstash Output to Amazon Elasticsearch Service"
   s.description     = "Output events to Amazon Elasticsearch Service with V4 signing"
@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'stud', ['>= 0.0.17', '~> 0.0']
   s.add_runtime_dependency 'cabin', ['~> 0.6']
   s.add_runtime_dependency "logstash-core-plugin-api", ">= 1.60", "<= 2.99"
-  s.add_runtime_dependency 'aws-sdk', '>= 2.3.22', '~> 2'
+  s.add_runtime_dependency 'aws-sdk', '~> 3'
 
   s.add_development_dependency 'logstash-codec-plain'
   s.add_development_dependency 'logstash-devutils', "~> 1.3", ">= 1.3.1"
